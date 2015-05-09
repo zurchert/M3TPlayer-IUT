@@ -5,7 +5,7 @@ public class Media {
 	/**
 	 * The media's id
 	 */
-	protected int id;
+	protected final int id;
 	
 	/**
 	 * The media's name
