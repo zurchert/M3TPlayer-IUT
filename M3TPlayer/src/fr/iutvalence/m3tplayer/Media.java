@@ -22,5 +22,7 @@ public class Media {
 		this.id = id;
 		this.title = title;
 	}
+
 	
+	// TODO Check if the ID is not in the Map<int, Media> attribute of the Library class
 }
