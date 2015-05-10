@@ -7,6 +7,9 @@ public class Playlist extends Library{
 	 */
 	private String name;
 
+	/**
+	 * Creates a new empty playlist
+	 */
 	public Playlist() {
 		super();
 	}
