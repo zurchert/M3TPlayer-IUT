@@ -1,21 +1,42 @@
 package fr.iutvalence.m3tplayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+
+/**
+ * Manages the library of the player.
+ *
+ */
 public class Library {
-	
-	/**
-	 * The list of the imported music.
-	 * Music are linked with their unique ID
-	 */
-	private Map<Integer, Radio> listRadios;
 
 	/**
-	 * The list of the imported music.
-	 * Music are linked with their unique ID
+	 * The library xml file path on the hard-drive.
+	 * 
 	 */
-	protected Map<Integer, Music> listMusics;
+	private final static String LIBRARY_CONFIG_PATH = "library.xml";
+	
+	/**
+	 * The library xml file
+	 */
+	private Document libraryFile;
+	
+	/**
+	 * The root node of the xml file
+	 */
+	private Element rootNode;
+
+	/**
+	 * The list of the imported medias.
+	 * They are linked with their unique ID
+	 */
+	protected Map<Integer, Media> listMedias;
 	
 	/**
 	 * The number of music which were imported into the library
@@ -32,16 +53,44 @@ public class Library {
 	 * At this moment, the library is empty.
 	 */
 	public Library() {
-		this.listRadios = new HashMap<Integer, Radio>();
-		this.listMusics = new HashMap<Integer, Music>();
+		this.listMedias = new HashMap<Integer, Media>();
 		this.totalMusicLenght = 0;
 		this.importedMusicNumber = 0;
+		
+		File configFile = new File(LIBRARY_CONFIG_PATH);
+		if(!configFile.exists())
+			this.loadMediasFromFile();
+		
+		else{
+			// Loads the xml file
+			try {
+				this.libraryFile = new SAXBuilder().build(LIBRARY_CONFIG_PATH);
+			} catch (JDOMException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			this.rootNode = this.libraryFile.getRootElement();
+		}
 	} 
 	
 	/**
-	 * Import a media into the library.
+	 * Parse the library config file and import all Medias which are into the file.
 	 */
-	public void importMedia(){
-		// TODO complete
+	private void loadMediasFromFile() {
+		this.rootNode = new Element("M3TPlayer");
+		
+		this.libraryFile = new Document(this.rootNode);
+
+		this.saveLibrary();
+		
+	}
+
+	/**
+	 * Saves the library file
+	 */
+	private void saveLibrary() {
+		// TODO Auto-generated method stub
 	}
 }
