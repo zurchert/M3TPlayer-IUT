@@ -54,6 +54,7 @@ public class Library {
 	 */
 	public Library() {
 		this.listMedias = new HashMap<Integer, Media>();
+		this.listMedias.put(0, new Radio(0, "NRJ", "http://broadcast.infomaniak.ch/radioespace-high.mp3"));
 		this.totalMusicLenght = 0;
 		this.importedMusicNumber = 0;
 		
@@ -85,6 +86,13 @@ public class Library {
 
 		this.saveLibrary();
 		
+	}
+	
+	/**
+	 * @return the listMedias
+	 */
+	public Map<Integer, Media> getListMedias() {
+		return this.listMedias;
 	}
 
 	/**

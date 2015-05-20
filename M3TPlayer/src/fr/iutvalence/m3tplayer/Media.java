@@ -1,5 +1,7 @@
 package fr.iutvalence.m3tplayer;
 
+import java.io.InputStream;
+
 public class Media {
 
 	/**
@@ -12,6 +14,10 @@ public class Media {
 	 */
 	protected String title;
 
+	/**
+	 * 
+	 */
+	protected InputStream stream;
 	
 	/**
 	 * Creates a new Media with given data
@@ -21,6 +27,20 @@ public class Media {
 	public Media(int id, String title) {
 		this.id = id;
 		this.title = title;
+	}
+
+	/**
+	 * @return the stream
+	 */
+	public InputStream getStream() {
+		return stream;
+	}
+
+	/**
+	 * @param stream the stream to set
+	 */
+	public void setStream(InputStream stream) {
+		this.stream = stream;
 	}
 
 	

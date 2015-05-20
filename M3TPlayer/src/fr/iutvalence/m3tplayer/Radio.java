@@ -1,9 +1,10 @@
 package fr.iutvalence.m3tplayer;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import fr.iutvalence.exceptions.InvalidRadioURLException;
 
 public class Radio extends Media{
 
@@ -23,14 +24,14 @@ public class Radio extends Media{
 		super(id, title);
 		try {
 			this.url = new URL(url);
-			if(!RadioStreamExtension.isValidUrlWithExt(this.url)){
-				throw new InvalidRadioURLException();
-			}
 		} catch (MalformedURLException e) {
 			System.out.println("L'url" + url + " n'est pas valide");
 			e.printStackTrace();
-		} catch (InvalidRadioURLException e) {
-			System.out.println("L'extension de l'url n'est pas valide");
+		}
+		try {
+			super.stream = new FileInputStream(new File(url));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
