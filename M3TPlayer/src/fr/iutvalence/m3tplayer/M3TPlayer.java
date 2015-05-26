@@ -27,7 +27,7 @@ public class M3TPlayer {
 	private Library library;
 	
 	/**
-	 * 
+	 * The audio player
 	 */
 	private AdvancedPlayer player;
 	
