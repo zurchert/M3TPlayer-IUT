@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.jdom2.Document;
@@ -23,7 +25,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "library.xml";
+	private final static String LIBRARY_PATH = "/Users/Thibault/library.xml";
 
 	/**
 	 * The library xml file
@@ -79,8 +81,61 @@ public class Library {
 
 			this.rootNode = this.libraryFile.getRootElement();
 		}
+		
+		this.importedMusicNumber = this.listMedias.size();
+		this.importMedia(new Music("test", "test", 10.));
+		this.importMedia(new Music("test", "test", 10.));
 	} 
 
+	/**
+	 * Loads all the medias which were saved into the library.
+	 * It is used at the creation of the library object. 
+	 */
+	public void loadMediaFromFile(){
+		Element media = null;
+		for (int mediaNumber = 0; mediaNumber < this.listMedias.size(); mediaNumber++) {
+			media = this.getMusicNode(mediaNumber);
+			if(media != null){
+				String title = media.getChildText("title");
+				String path = media.getChildText("path");
+				String id = media.getAttribute("id").toString();
+				if(media.getAttribute("media").toString() == "music"){
+					String artist = media.getChildText("artist");
+					String album = media.getChildText("album");
+					String rating = media.getChildText("rating");
+					
+					// TODO GET MUSIC LENGHT
+					Music music = new Music(title, path, 11, artist, album);
+					music.setRating(Integer.getInteger(rating));
+					
+					this.listMedias.put(Integer.getInteger(id), music);
+				}
+				else{
+					this.listMedias.put(Integer.getInteger(id), new Radio(title, path));
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Returns the media node which maches with a given id
+	 * @param id The id of the media
+	 * @return The media node if the id maches with.
+	 * 	       Else it returns <tt>null</tt> if there is no match
+	 */
+	public Element getMusicNode(int id){
+		List<Element> listMusic = this.rootNode.getChildren("Media");
+		Iterator<Element> iterator = listMusic.iterator();
+		while(iterator.hasNext()){
+			Element currentMusicNode = (Element) iterator.next();
+			String musicId = currentMusicNode.getAttributeValue("id");
+			if(Integer.parseInt(musicId) == id){
+				return currentMusicNode;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Imports a media into the library
 	 * @param media The media object to import
@@ -93,13 +148,18 @@ public class Library {
 		Element title = new Element("title");
 		Element audioPath = new Element("path");
 		
+		
+		mediaNode.setAttribute("id", Integer.toString(this.importedMusicNumber));
+		
 		// If the media is a Radio
-		if(media.getClass().equals(new Radio(-1, "radio", "radio").getClass())){
-			//
+		if(media.getClass().equals(new Radio("radio", "radio").getClass())){
+			mediaNode.setAttribute("media", "radio");
 		}
 		
 		// If it is a Music
 		else{
+			mediaNode.setAttribute("media", "music");
+			
 			Music music = (Music) media;
 			Element artist = new Element("artist");
 			Element album = new Element("album");
@@ -122,6 +182,9 @@ public class Library {
 		mediaNode.addContent(audioPath);
 
 		this.rootNode.addContent(mediaNode);
+		
+		this.listMedias.put(importedMusicNumber++, media);
+		
 		this.saveLibrary();
 		
 	}
