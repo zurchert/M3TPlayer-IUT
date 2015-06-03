@@ -55,7 +55,11 @@ public class M3TPlayer {
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
 		}
-		
+		try {
+			this.player.play();
+		} catch (JavaLayerException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }
