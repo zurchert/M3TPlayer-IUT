@@ -25,7 +25,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "/Users/Thibault/library.xml";
+	private final static String LIBRARY_PATH = "/Users/Théo/library.xml";
 
 	/**
 	 * The library xml file
@@ -83,8 +83,8 @@ public class Library {
 		}
 		
 		this.importedMusicNumber = this.listMedias.size();
-		this.importMedia(new Music("test", "test", 10.));
-		this.importMedia(new Music("test", "test", 10.));
+		this.importMedia(new Music("test", "C:/Users/Théo/Music/MrKey_Trailer.mp3", 10.));
+		this.importMedia(new Music("test2", "C:/Users/Théo/Music/Big_Data-Dangerous_(OliverRemix).mp3", 10.));
 	} 
 
 	/**
