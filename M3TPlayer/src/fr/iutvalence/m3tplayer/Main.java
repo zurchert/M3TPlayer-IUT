@@ -3,8 +3,15 @@ package fr.iutvalence.m3tplayer;
 
 public class Main {
 
-	public static void main(String[] args) {
-		new M3TPlayer().playMedia(0);
+	public static void main(String[] args){
+		
+		
+		M3TPlayer m3t = new M3TPlayer();
+//		m3t.activateRandomPlaying();
+	//	m3t.playMedia();
+		m3t.previousMedia();
+		
+		
 	}
 
 }
