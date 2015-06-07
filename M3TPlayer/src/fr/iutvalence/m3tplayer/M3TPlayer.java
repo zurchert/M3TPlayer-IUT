@@ -79,12 +79,22 @@ public class M3TPlayer{
 	 * @throws LineUnavailableException 
 	 * @throws IOException 
 	 */
-	public void changeVolume() throws LineUnavailableException, IOException{
+	public void changeVolume(){
 		//TODO method
-		Clip clip = AudioSystem.getClip();
-		clip.open((AudioInputStream) this.currentMedia.getStream());
-		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		gainControl.setValue(-30.0f);
+		Clip clip;
+		try {
+			clip = AudioSystem.getClip();
+			clip.open(this.currentMedia.audioGetStream());
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			gainControl.setValue(-30.0f);
+		} catch (LineUnavailableException e1) {
+			// TODO Bloc catch généré automatiquement
+			e1.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		}
 	}
 
 	/**
