@@ -69,7 +69,7 @@ public class Library {
 		else{
 			// Loads the xml file
 			try {
-				this.libraryFile = new SAXBuilder().build(LIBRARY_PATH);
+				this.libraryFile = new SAXBuilder().build(new File(LIBRARY_PATH));
 			} catch (JDOMException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -78,10 +78,8 @@ public class Library {
 
 			this.loadMediaFromFile();
 		}
-		
 		this.importedMusicNumber = this.listMedias.size();
-		//		this.importMedia(new Music("test1", "F:\\musics\\1.mp3", 10.));
-		//		this.importMedia(new Music("test2", "F:\\musics\\2.mp3", 10.));
+		this.importMedia(new Music("test2", "F:\\musics\\2.mp3", 10.));
 	} 
 
 	/**
@@ -134,20 +132,12 @@ public class Library {
 
 		return null;
 	}
-
-	/**
-	 * Imports a media into the list composing the library
-	 * @param media The media to import
-	 */
-	private void importMedia(Media media) {
-		this.listMedias.put(this.importedMusicNumber++, media);
-	}
 	
 	/**
 	 * Imports a media into the library file
 	 * @param media The media object to import
 	 */
-	public void importMediaInLibraryFile(Media media){
+	public void importMedia(Media media){
 
 		//TODO Adding ID to media in XML file ?
 
@@ -190,7 +180,7 @@ public class Library {
 
 		this.libraryFile.getRootElement().addContent(mediaNode);
 
-		importMedia(media);
+		this.listMedias.put(this.importedMusicNumber++, media);
 
 		this.saveLibrary();
 
