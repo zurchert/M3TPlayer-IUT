@@ -1,5 +1,8 @@
 package fr.iutvalence.m3tplayer;
 
+import java.util.Random;
+
+import javax.sound.sampled.FloatControl;
 import fr.iutvalence.exceptions.UnknownMediaException;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -52,17 +55,24 @@ public class M3TPlayer{
 	/**
 	 * Switchs the random playing to on/off
 	 */
-	public void setRandomPlaying(boolean random){
-		this.randomPlaying = true;
+	public void setRandomPlaying(){
+		int size = this.library.listMedias.size();
+		if (this.randomPlaying)
+			this.randomPlaying=false;
+		else {
+			this.randomPlaying = true;
+			Random rdm = new Random();
+			this.currentMedia = this.library.getMedia(rdm.nextInt(size));			
+		}
 	}
 	
 	/**
 	 * Allow to change the volume of the M3TPlayer
 	 */
-	public void changeVolume(float gain){
+	public void changeVolume(){
 		//TODO method
-		//FloatControl volControl = (FloatControl) .getControl(FloatControl.Type.MASTER_GAIN);
-		//volControl.setValue(gain);
+//		GainControl gain = this.player.getGainControl();
+//		gain.setLevel((float)0.5);
 	}
 
 	/**
@@ -71,26 +81,36 @@ public class M3TPlayer{
 	 *                <tt>NEXT</tt> to play the next media
 	 */
 	public void changeMedia(PlayingControl control){
-		
-		int mediaId = 0;
-		try {
-			mediaId = this.library.getMediaId(this.currentMedia);
-		} catch (UnknownMediaException e1) {
-			e1.printStackTrace();
+		int size = this.library.listMedias.size();
+		if (!randomPlaying){
+			int mediaId = 0;
+			try {
+				mediaId = this.library.getMediaId(this.currentMedia);
+			} catch (UnknownMediaException e1) {
+				e1.printStackTrace();
+			}
+			switch (control) {
+				case PREVIOUS:
+					mediaId -= 1;
+					if (mediaId < 0)
+						mediaId = size-1;
+					break;
+				case NEXT:
+					mediaId += 1;
+					if (mediaId >= size)
+						mediaId = 0;
+					break;
+				default:
+					break;
+			}
+			
+			// TODO Check if the prev/next media exists ?
+			this.currentMedia = this.library.getMedia(mediaId);
 		}
-		switch (control) {
-			case PREVIOUS:
-				mediaId -= 1;
-				break;
-			case NEXT:
-				mediaId += 1;
-				break;
-			default:
-				break;
+		else{
+			Random rdm = new Random();
+			this.currentMedia = this.library.getMedia(rdm.nextInt(size));
 		}
-		
-		// TODO Check if the prev/next media exists ?
-		this.currentMedia = this.library.getMedia(mediaId);
 		this.playMedia();
 	}
 	
