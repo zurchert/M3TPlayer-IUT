@@ -1,21 +1,15 @@
 package fr.iutvalence.m3tplayer;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
-import javax.media.Controller;
-import javax.media.GainControl;
-import javax.media.Player;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import fr.iutvalence.exceptions.UnknownMediaException;
 
@@ -48,6 +42,17 @@ public class M3TPlayer{
 	private AdvancedPlayer player;
 	
 	/**
+	 * The state of playing
+	 */
+	private boolean isPlaying;
+	
+
+	/**
+	 * The position of the music
+	 */
+	private int position;
+	
+	/**
 	 * Initializes the player with default values.
 	 * Sets the volume to 100 percent, and the random mode to false, and the identifiant to 0.
 	 */
@@ -55,11 +60,12 @@ public class M3TPlayer{
 		this.library = new Library();
 		this.volume = 100;
 		this.randomPlaying = false;
-
+		this.isPlaying = false;
+		this.position = 0;
 		if(this.library.isEmpty())
 			this.currentMedia = null;
 		else
-			this.currentMedia = this.library.getMedia(0);
+			this.currentMedia = this.library.getMedia(32);
 		
 		this.player = null;
 	}
@@ -79,21 +85,40 @@ public class M3TPlayer{
 	}
 	
 	/**
+	 * Allow to stop the music
+	 */
+	public void stop(){
+		this.player.stop();
+		this.isPlaying = false;
+	}
+	
+	
+	public void pause(){
+		Player playing;
+		try {
+			playing = new Player(this.currentMedia.getStream());
+			this.position = playing.getPosition();
+			this.player.stop();
+		} catch (JavaLayerException e) {
+			// TODO Bloc catch généré automatiquement
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Allow to change the volume of the M3TPlayer
-	 * @throws LineUnavailableException 
-	 * @throws IOException 
 	 */
 	public void changeVolume(){
 		//TODO method
-		InputStream stream;
+		DataLine.Info info = null;
+	    Clip clip;
 		try {
-			stream = AudioSystem.getAudioInputStream(this.currentMedia.getStream());
-			FloatControl gainControl = (FloatControl) ((Line) stream).getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-30.0f);
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Bloc catch généré automatiquement
-			e.printStackTrace();
-		} catch (IOException e) {
+			clip = (Clip) AudioSystem.getLine(info);
+			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			double gain = .5D; // number between 0 and 1 (loudest)
+		    float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
+		    gainControl.setValue(dB);
+		} catch (LineUnavailableException e) {
 			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		}
@@ -144,7 +169,11 @@ public class M3TPlayer{
 	public void playMedia(){
 		try {
 			this.player = new AdvancedPlayer(this.currentMedia.getStream());
-			this.player.play();
+			this.isPlaying = true;
+			this.player.play(this.position, Integer.MAX_VALUE);
+			while (this.isPlaying){
+				this.changeMedia(PlayingControl.NEXT);
+			}
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
 		} catch(NullPointerException e){
