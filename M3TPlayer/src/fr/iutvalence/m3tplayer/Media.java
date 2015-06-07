@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+
 public class Media {
 	
 	/**
@@ -22,6 +25,7 @@ public class Media {
 	 */
 	protected InputStream stream;
 	
+	protected AudioInputStream audioStream;
 	/**
 	 * Creates a new Media with given data
 	 * @param title The media's title
@@ -44,6 +48,9 @@ public class Media {
 		return this.stream;
 	}
 
+	public AudioInputStream audioGetStream() {
+		return this.audioStream;
+	}
 	/**
 	 * @return the title
 	 */
