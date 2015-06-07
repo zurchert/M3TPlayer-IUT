@@ -24,8 +24,7 @@ public class Media {
 	 * The media's stream
 	 */
 	protected InputStream stream;
-	
-	protected AudioInputStream audioStream;
+
 	/**
 	 * Creates a new Media with given data
 	 * @param title The media's title
@@ -48,9 +47,6 @@ public class Media {
 		return this.stream;
 	}
 
-	public AudioInputStream audioGetStream() {
-		return this.audioStream;
-	}
 	/**
 	 * @return the title
 	 */

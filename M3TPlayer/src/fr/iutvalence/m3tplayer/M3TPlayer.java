@@ -1,15 +1,19 @@
 package fr.iutvalence.m3tplayer;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 
+import javax.media.Controller;
 import javax.media.GainControl;
 import javax.media.Player;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
@@ -81,20 +85,19 @@ public class M3TPlayer{
 	 */
 	public void changeVolume(){
 		//TODO method
-		Clip clip;
+		InputStream stream;
 		try {
-			clip = AudioSystem.getClip();
-			clip.open(this.currentMedia.audioGetStream());
-			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+			stream = AudioSystem.getAudioInputStream(this.currentMedia.getStream());
+			FloatControl gainControl = (FloatControl) ((Line) stream).getControl(FloatControl.Type.MASTER_GAIN);
 			gainControl.setValue(-30.0f);
-		} catch (LineUnavailableException e1) {
+		} catch (UnsupportedAudioFileException e) {
 			// TODO Bloc catch généré automatiquement
-			e1.printStackTrace();
-		}
-		catch (IOException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		}
+		
 	}
 
 	/**
@@ -104,7 +107,7 @@ public class M3TPlayer{
 	 */
 	public void changeMedia(PlayingControl control){
 		int size = this.library.listMedias.size();
-		if (!randomPlaying){
+		if (!this.randomPlaying){
 			int mediaId = 0;
 			try {
 				mediaId = this.library.getMediaId(this.currentMedia);
@@ -126,7 +129,6 @@ public class M3TPlayer{
 					break;
 			}
 			
-			// TODO Check if the prev/next media exists ?
 			this.currentMedia = this.library.getMedia(mediaId);
 		}
 		else{
