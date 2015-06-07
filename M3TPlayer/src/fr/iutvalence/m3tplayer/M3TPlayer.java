@@ -1,12 +1,7 @@
 package fr.iutvalence.m3tplayer;
 
-import java.util.Random;
-
-import javax.sound.sampled.FloatControl;
-
-import javazoom.jl.decoder.Equalizer.EQFunction;
+import fr.iutvalence.exceptions.UnknownMediaException;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.JavaSoundAudioDevice;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
 public class M3TPlayer{
@@ -38,36 +33,27 @@ public class M3TPlayer{
 	private AdvancedPlayer player;
 	
 	/**
-	 * The identifiant of the music
-	 */
-	private int id;
-	
-	/**
 	 * Initializes the player with default values.
 	 * Sets the volume to 100 percent, and the random mode to false, and the identifiant to 0.
 	 */
 	public M3TPlayer() {
+		this.library = new Library();
 		this.volume = 100;
 		this.randomPlaying = false;
-		this.currentMedia = null;
+
+		if(this.library.isEmpty())
+			this.currentMedia = null;
+		else
+			this.currentMedia = this.library.getMedia(0);
+		
 		this.player = null;
-		this.library = new Library();
-		if (this.randomPlaying == false)
-			this.id = 0;
 	}
 	
 	/**
-	 * Give a random identifiant
+	 * Switchs the random playing to on/off
 	 */
-	public void activateRandomPlaying(){
-		int size = this.library.listMedias.size();
-		if (this.randomPlaying)
-			this.randomPlaying = false;
-		else {
-			this.randomPlaying = true;
-			Random random = new Random();
-			setId(random.nextInt(size));
-		}
+	public void setRandomPlaying(boolean random){
+		this.randomPlaying = true;
 	}
 	
 	/**
@@ -78,57 +64,47 @@ public class M3TPlayer{
 		//FloatControl volControl = (FloatControl) .getControl(FloatControl.Type.MASTER_GAIN);
 		//volControl.setValue(gain);
 	}
-	
 
 	/**
-	 * To set the new identifiant
-	 * @param id
+	 * Changes the current media to another one.
+	 * @param control <tt>PREVIOUS</tt> to play the previous media,
+	 *                <tt>NEXT</tt> to play the next media
 	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
-	 * Allow to play the next song
-	 */
-	public void nextMedia(){
-		int identifiant = this.id;
-		identifiant++;
-		if (identifiant >= this.library.listMedias.size()){
-			setId(0);
+	public void changeMedia(PlayingControl control){
+		
+		int mediaId = 0;
+		try {
+			mediaId = this.library.getMediaId(this.currentMedia);
+		} catch (UnknownMediaException e1) {
+			e1.printStackTrace();
 		}
-		else setId(identifiant);
-		playMedia();
+		switch (control) {
+			case PREVIOUS:
+				mediaId -= 1;
+				break;
+			case NEXT:
+				mediaId += 1;
+				break;
+			default:
+				break;
+		}
+		
+		// TODO Check if the prev/next media exists ?
+		this.currentMedia = this.library.getMedia(mediaId);
+		this.playMedia();
 	}
 	
 	/**
-	 * Allow to play the previous song
-	 */
-	public void previousMedia(){
-		int identifiant = this.id;
-		identifiant--;
-		if (identifiant < 0)
-			setId(this.library.listMedias.size()-1);
-		else setId(identifiant);
-		playMedia();
-	}
-	
-	/**
-	 * 
-	 * @param mediaID
+	 * Plays the current media
 	 */
 	public void playMedia(){
-		// TODO complete method
-		Media mediaToPlay = this.library.getListMedias().get(this.id);
 		try {
-			this.player = new AdvancedPlayer(mediaToPlay.getStream());
-		} catch (JavaLayerException e) {
-			e.printStackTrace();
-		}
-		try {
+			this.player = new AdvancedPlayer(this.currentMedia.getStream());
 			this.player.play();
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
+		} catch(NullPointerException e){
+			System.out.println("No media to play ! (the source does not exists)");
 		}
 	}
 	
