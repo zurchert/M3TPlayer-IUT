@@ -80,6 +80,7 @@ public class Library {
 		}
 		this.importedMusicNumber = this.listMedias.size();
 		this.importMedia(new Music("test2", "C:\\Users\\Théo\\Music\\Big_Data-Dangerous_(OliverRemix).mp3", 10.));
+		this.importMedia(new Music("test", "C:\\Users\\Théo\\Music\\MrKey_Trailer.mp3", 10.));
 	} 
 
 	/**

@@ -9,7 +9,6 @@ public class Main {
 		
 		M3TPlayer m3t = new M3TPlayer();
 //		m3t.activateRandomPlaying();
-		m3t.changeVolume();
 		m3t.playMedia();	
 		m3t.playMedia();
 		//m3t.changeMedia(PlayingControl.PREVIOUS);
