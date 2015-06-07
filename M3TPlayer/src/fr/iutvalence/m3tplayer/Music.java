@@ -44,12 +44,6 @@ public class Music extends Media{
 		this.artist = null;
 		this.lenght = lenght;
 		this.rating = 0;
-		try {
-			this.setStream(new FileInputStream(new File(path)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
@@ -68,12 +62,6 @@ public class Music extends Media{
 		this.album = album;
 		this.lenght = lenght;
 		this.rating = 0;
-		try {
-			this.setStream(new FileInputStream(new File(path)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	/**
