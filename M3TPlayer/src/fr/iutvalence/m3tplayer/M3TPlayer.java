@@ -1,11 +1,19 @@
 package fr.iutvalence.m3tplayer;
 
+import java.io.IOException;
 import java.util.Random;
 
+import javax.media.GainControl;
+import javax.media.Player;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import fr.iutvalence.exceptions.UnknownMediaException;
+import javax.sound.sampled.LineUnavailableException;
+
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
+import fr.iutvalence.exceptions.UnknownMediaException;
 
 public class M3TPlayer{
 
@@ -68,11 +76,15 @@ public class M3TPlayer{
 	
 	/**
 	 * Allow to change the volume of the M3TPlayer
+	 * @throws LineUnavailableException 
+	 * @throws IOException 
 	 */
-	public void changeVolume(){
+	public void changeVolume() throws LineUnavailableException, IOException{
 		//TODO method
-//		GainControl gain = this.player.getGainControl();
-//		gain.setLevel((float)0.5);
+		Clip clip = AudioSystem.getClip();
+		clip.open((AudioInputStream) this.currentMedia.getStream());
+		FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+		gainControl.setValue(-30.0f);
 	}
 
 	/**

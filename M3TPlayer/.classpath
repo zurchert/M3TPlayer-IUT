@@ -17,5 +17,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/M3TPlayer/lib/docs/JLayer-doc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/JMF2.1.1e/lib/jmf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
