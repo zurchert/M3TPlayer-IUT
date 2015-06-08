@@ -1,6 +1,6 @@
-package fr.iutvalence.m3tplayer;
+package enumerations;
 
-public enum PlayingControl {
+public enum PlayerControl {
 
 	/**
 	 * The previous media
@@ -11,5 +11,4 @@ public enum PlayingControl {
 	 * The next media
 	 */
 	NEXT;
-	
 }
