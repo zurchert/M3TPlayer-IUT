@@ -231,15 +231,12 @@ public class Library {
 	 * @throws UnknownMediaException if the media does not exist in the library
 	 */
 	public int getMediaId(Media media) throws UnknownMediaException{
-		int id = -1;
+		int id = 0;
 		for (Media m : this.listMedias.values()) {
-			if(!m.equals(media))
+			if(!media.equals(m))
 				id++;
 		}
-		if(id == -1)
-			throw new UnknownMediaException();
-		
-		return id + 1;
+		return id;
 	}
 
 	/**

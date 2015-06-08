@@ -82,8 +82,9 @@ public class Media {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((this.path == null) ? 0 : this.path.hashCode());
+		result = prime * result + ((this.stream == null) ? 0 : this.stream.hashCode());
+		result = prime * result + ((this.title == null) ? 0 : this.title.hashCode());
 		return result;
 	}
 
@@ -102,17 +103,21 @@ public class Media {
 		if (path == null) {
 			if (other.path != null)
 				return false;
-		} else if (!path.equals(other.path))
+		} else if (!this.path.equals(other.path))
 			return false;
-		if (!stream.equals(other.stream))
+		if (this.stream == null) {
+			if (other.stream != null)
+				return false;
+		} else if (!this.stream.equals(other.stream))
 			return false;
-		if (title == null) {
+		if (this.title == null) {
 			if (other.title != null)
 				return false;
-		} else if (!title.equals(other.title))
+		} else if (!this.title.equals(other.title))
 			return false;
 		return true;
 	}
+
 	
 	// TODO Check if the ID is not in the Map<int, Media> attribute of the Library class
 }
