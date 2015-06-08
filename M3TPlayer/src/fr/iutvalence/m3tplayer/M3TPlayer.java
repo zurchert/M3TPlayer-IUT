@@ -11,6 +11,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
+import enumerations.PlayerControl;
 import fr.iutvalence.exceptions.UnknownMediaException;
 
 public class M3TPlayer{
@@ -135,7 +136,7 @@ public class M3TPlayer{
 	 * @param control <tt>PREVIOUS</tt> to play the previous media,
 	 *                <tt>NEXT</tt> to play the next media
 	 */
-	public void changeMedia(PlayingControl control){
+	public void changeMedia(PlayerControl control){
 		int size = this.library.getImportedMusicNumber();
 		if (!this.randomPlaying){
 			int mediaId = 0;
@@ -176,7 +177,7 @@ public class M3TPlayer{
 			this.isPlaying = true;
 			this.player.play(this.position, Integer.MAX_VALUE);
 			while (this.isPlaying){
-				this.changeMedia(PlayingControl.NEXT);
+				this.changeMedia(PlayerControl.NEXT);
 			}
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
