@@ -18,6 +18,7 @@ import org.jdom2.output.XMLOutputter;
 
 import enumerations.MediaInformation;
 import fr.iutvalence.exceptions.UnknownMediaException;
+import fr.iutvalence.utils.Utils;
 
 /**
  * Manages the library of the player.
@@ -80,6 +81,11 @@ public class Library {
 			this.loadMediaFromFile();
 		}
 		this.importedMusicNumber = this.listMedias.size();
+		this.importMedia(new Music("1", "F:\\musics\\1.mp3", 1), true);
+		this.importMedia(new Music("1", "F:\\musics\\2.mp3", 1), true);
+		this.importMedia(new Music("1", "F:\\musics\\3.mp3", 1), true);
+		this.importMedia(new Music("1", "F:\\musics\\4.mp3", 1), true);
+		
 	} 
 
 	/**
@@ -207,7 +213,6 @@ public class Library {
 			MediaInformation key = keyIterator.next();
 			Element mediaChild = mediaToUpdate.getChild(key.toString());
 			if(mediaChild != null){
-				System.out.println(informations.get(key));
 				mediaChild.setText(informations.get(key));
 			}
 		}
@@ -228,15 +233,9 @@ public class Library {
 	 * Returns the id in the list of the given media
 	 * @param media The media
 	 * @return The media's id
-	 * @throws UnknownMediaException if the media does not exist in the library
 	 */
-	public int getMediaId(Media media) throws UnknownMediaException{
-		int id = 0;
-		for (Media m : this.listMedias.values()) {
-			if(!media.equals(m))
-				id++;
-		}
-		return id - 1;
+	public int getMediaId(Media media) {
+		return (Integer) Utils.getKeyFromValue(this.listMedias, media);
 	}
 
 	/**
