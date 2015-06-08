@@ -30,7 +30,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "C:\\Users\\Théo\\Music\\library.xml";
+	private final static String LIBRARY_PATH = "F:\\musics\\library.xml";
 
 	/**
 	 * The library xml file

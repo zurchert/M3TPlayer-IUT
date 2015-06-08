@@ -5,6 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import enumerations.PlayerControl;
+import fr.iutvalence.m3tplayer.M3TPlayer;
 
 public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
@@ -12,8 +16,12 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 
 	private ControlButtonsPanel controllButtonsPanel;
 	
+	private M3TPlayer m3tPlayer;
+	
 	public MainWindow(){
-		
+		this.m3tPlayer = new M3TPlayer();
+		Thread m3tThread = new Thread(this.m3tPlayer);
+
 		this.setTitle(APP_TITLE);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -27,13 +35,13 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComponent source = (JComponent) e.getSource();
-		
+		Thread m3tThread = new Thread(this.m3tPlayer);
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			// TODO PLay
+			m3tThread.start();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
-			// TODO Next
+
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){

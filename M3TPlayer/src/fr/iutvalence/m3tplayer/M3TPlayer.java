@@ -12,9 +12,8 @@ import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import enumerations.PlayerControl;
-import fr.iutvalence.exceptions.UnknownMediaException;
 
-public class M3TPlayer{
+public class M3TPlayer implements Runnable{
 
 	/**
 	 * The volume of the player.
@@ -176,7 +175,6 @@ public class M3TPlayer{
 			this.isPlaying = true;
 			this.player.play(this.position, Integer.MAX_VALUE);
 			while (this.isPlaying){
-				this.changeMedia(PlayerControl.PREVIOUS);
 				this.changeMedia(PlayerControl.NEXT);
 				this.playMedia();
 			}
@@ -185,6 +183,11 @@ public class M3TPlayer{
 		} catch(NullPointerException e){
 			System.out.println("No media to play ! (the source does not exists)");
 		}
+	}
+
+	@Override
+	public void run() {
+		this.playMedia();
 	}
 	
 }
