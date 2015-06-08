@@ -1,15 +1,16 @@
 package fr.iutvalence.gui;
 
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import javax.swing.Timer;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
 import fr.iutvalence.m3tplayer.M3TPlayer;
@@ -25,66 +26,73 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
 	private JFrame frame = new JFrame();
 	
-	private JTextArea titleText = new JTextArea();
-	
-	private JTextArea pathText = new JTextArea();
+	private JLabel statusBar = new JLabel("State: Ready");
+
 	
 	public MainWindow(){
 		
 		this.setTitle(APP_TITLE);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new BorderLayout());
+		
+		this.statusBar.setBorder(BorderFactory.createEtchedBorder());
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
 		this.getContentPane().add(this.controllButtonsPanel);
+		this.getContentPane().add(this.statusBar, BorderLayout.SOUTH);
 		
 		this.pack();
 	}
+	
+	ActionListener taskPerformer = new ActionListener() {
+		public void actionPerformed(ActionEvent evt) {
+			MainWindow.this.statusBar.setText("Status: Ready");
+		}
+	};
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComponent source = (JComponent) e.getSource();
 		
 		if(source.equals(this.controllButtonsPanel.getImportButton())){
-			frame.setSize(1100, 100);
-			frame.setTitle("Import music");
-			frame.setLayout(new GridLayout(1, 9));
-			JLabel title = new JLabel("Title :");
-			frame.add(title);
-			frame.add(this.titleText);
-			JLabel path = new JLabel("Path of the media :");
-			frame.add(path);
-			frame.add(this.pathText);
-			JLabel album = new JLabel("Name of the album :");
-			frame.add(album);
-			JTextPane albumText = new JTextPane();
-			frame.add(albumText);
-			JLabel artist = new JLabel("Name of the artist :");
-			frame.add(artist);
-			JTextPane artistText = new JTextPane();
-			frame.add(artistText);
-			frame.add(this.controllButtonsPanel.getValidButton());
-			frame.setVisible(true);
-		}
-		
-		if(source.equals(this.controllButtonsPanel.getValidButton())){
-			m3t.getLibrary().importMedia(new Music(this.titleText.getText(), this.pathText.getText(), 10.), true);
+			JFileChooser fileChooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Audio File", "mp3", "wav");
+			fileChooser.setFileFilter(filter);
+			
+			int returnVal = fileChooser.showOpenDialog(this);
+		    if(returnVal == JFileChooser.APPROVE_OPTION) {
+		    	/* TODO Add path parser which returns a Media object ready to use
+		    	 *    - title
+		    	 *    - path
+		    	 *    - artist
+		    	 *    - album
+		    	 *    - lenght
+		    	 */
+		    	this.m3t.getLibrary().importMedia(new Music("music", fileChooser.getSelectedFile().getPath(), 10.), true);
+
+		    	int delay = 2000; //milliseconds
+		    	Timer timer = new Timer(delay, this.taskPerformer);
+		    	timer.start();
+		    	
+		    	this.statusBar.setText(this.statusBar.getText() + " The file has been correctly imported");
+		    }
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			m3t = new M3TPlayer();
-			m3t.playMedia();
+			this.m3t = new M3TPlayer();
+			this.m3t.playMedia();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
-			m3t.changeMedia(PlayerControl.NEXT);
+			this.m3t.changeMedia(PlayerControl.NEXT);
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){
-			m3t.changeMedia(PlayerControl.PREVIOUS);
+			this.m3t.changeMedia(PlayerControl.PREVIOUS);
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getRandomButton())){
-			m3t.setRandomPlaying();
+			this.m3t.setRandomPlaying();
 		}
 	}
 
