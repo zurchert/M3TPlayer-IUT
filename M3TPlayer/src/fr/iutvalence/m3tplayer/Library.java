@@ -236,7 +236,7 @@ public class Library {
 			if(!media.equals(m))
 				id++;
 		}
-		return id;
+		return id - 1;
 	}
 
 	/**
