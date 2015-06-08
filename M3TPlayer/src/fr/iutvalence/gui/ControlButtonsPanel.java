@@ -1,4 +1,4 @@
-package fr.iutvalence.ihm;
+package fr.iutvalence.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

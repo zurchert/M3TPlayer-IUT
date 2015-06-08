@@ -1,4 +1,4 @@
-package fr.iutvalence.ihm;
+package fr.iutvalence.gui;
 
 import javax.swing.SwingUtilities;
 
