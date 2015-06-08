@@ -103,9 +103,9 @@ public class Library {
 			if(media.getAttributeValue("media") == "music"){
 				String artist = media.getChildText("artist");
 				String album = media.getChildText("album");
-				this.importMedia(new Music(title, path, 10, artist, album)); // TODO change music lenght
+				this.importMedia(new Music(title, path, 10, artist, album), false); // TODO change music lenght
 			} else{
-				this.importMedia(new Radio(title, path));
+				this.importMedia(new Radio(title, path), false);
 			}
 			mediaId++;
 		}
@@ -134,8 +134,10 @@ public class Library {
 	/**
 	 * Imports a media into the library file
 	 * @param media The media object to import
+	 * @param addToLibraryFile <tt>true</tt> if you want to add the media into the library file,
+	 *                         <tt>false</tt> if you only want to add the media in the list.
 	 */
-	public void importMedia(Media media){
+	public void importMedia(Media media, boolean addToLibraryFile){
 
 		Element mediaNode = new Element("Media");
 		Element title = new Element("title");
@@ -143,38 +145,40 @@ public class Library {
 
 
 		mediaNode.setAttribute("id", Integer.toString(this.importedMusicNumber));
+		
+		if(addToLibraryFile){
+			// If the media is a Radio
+			if(media.getClass().equals(Radio.class)){
+				mediaNode.setAttribute("media", "radio");
+			}
 
-		// If the media is a Radio
-		if(media.getClass().equals(Radio.class)){
-			mediaNode.setAttribute("media", "radio");
+			// If it is a Music
+			else{
+				mediaNode.setAttribute("media", "music");
+
+				Music music = (Music) media;
+				Element artist = new Element("artist");
+				Element album = new Element("album");
+				Element rating = new Element("rating");
+
+				// Set the rating to 0 (default value)
+				rating.setText(Integer.toString(music.getRating()));
+				artist.setText(music.getArtist());
+				album.setText(music.getAlbum());
+				title.setText(music.getTitle());
+
+				mediaNode.addContent(artist);
+				mediaNode.addContent(album);
+				mediaNode.addContent(rating);
+			}
+
+			audioPath.setText(media.getPath());
+
+			mediaNode.addContent(title);
+			mediaNode.addContent(audioPath);
+
+			this.libraryFile.getRootElement().addContent(mediaNode);
 		}
-
-		// If it is a Music
-		else{
-			mediaNode.setAttribute("media", "music");
-
-			Music music = (Music) media;
-			Element artist = new Element("artist");
-			Element album = new Element("album");
-			Element rating = new Element("rating");
-
-			// Set the rating to 0 (default value)
-			rating.setText(Integer.toString(music.getRating()));
-			artist.setText(music.getArtist());
-			album.setText(music.getAlbum());
-			title.setText(music.getTitle());
-
-			mediaNode.addContent(artist);
-			mediaNode.addContent(album);
-			mediaNode.addContent(rating);
-		}
-
-		audioPath.setText(media.getPath());
-
-		mediaNode.addContent(title);
-		mediaNode.addContent(audioPath);
-
-		this.libraryFile.getRootElement().addContent(mediaNode);
 
 		this.listMedias.put(this.importedMusicNumber++, media);
 
@@ -227,4 +231,19 @@ public class Library {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * @return the importedMusicNumber
+	 */
+	public int getImportedMusicNumber() {
+		return this.importedMusicNumber;
+	}
+
+	/**
+	 * @return the totalMusicLenght
+	 */
+	public float getTotalMusicLenght() {
+		return this.totalMusicLenght;
+	}
+	
 }
