@@ -15,7 +15,9 @@ public class ControlButtonsPanel extends JPanel{
 	
 	private JButton randomButton;
 
+	private JButton importButton;
 	
+	private JButton validButton;
 	
 	public ControlButtonsPanel(ActionListener listener) {
 		super();
@@ -23,16 +25,37 @@ public class ControlButtonsPanel extends JPanel{
 		this.nextButton = new JButton("Next");
 		this.previousButton = new JButton("Previous");
 		this.randomButton = new JButton("Random");
+		this.importButton = new JButton("Import");
+		this.validButton = new JButton("OK");	
 		
+		this.add(this.importButton);
 		this.add(this.previousButton);
 		this.add(this.playButton);
 		this.add(this.nextButton);
 		this.add(this.randomButton);
 		
+		this.importButton.addActionListener(listener);
 		this.playButton.addActionListener(listener);
 		this.nextButton.addActionListener(listener);
 		this.previousButton.addActionListener(listener);
 		this.randomButton.addActionListener(listener);
+		this.validButton.addActionListener(listener);
+	}
+
+
+	/**
+	 * @return the validButton
+	 */
+	public JButton getValidButton() {
+		return validButton;
+	}
+
+
+	/**
+	 * @return the importButton
+	 */
+	public JButton getImportButton() {
+		return importButton;
 	}
 
 
