@@ -3,7 +3,6 @@ package fr.iutvalence.m3tplayer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +27,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "C:\\Users\\Théo\\Music\\library.xml";
+	private final static String LIBRARY_PATH = "F:\\musics\\library.xml";
 
 	/**
 	 * The library xml file
@@ -39,17 +38,17 @@ public class Library {
 	 * The list of the imported medias.
 	 * They are linked with their unique ID
 	 */
-	protected Map<Integer, Media> listMedias;
+	private Map<Integer, Media> listMedias;
 
 	/**
 	 * The number of music which were imported into the library
 	 */
-	protected int importedMusicNumber;
+	private int importedMusicNumber;
 
 	/**
 	 * The sum of the lenght of all musics imported into the library.
 	 */
-	protected float totalMusicLenght;
+	private float totalMusicLenght;
 
 	/**
 	 * Initializes the library.
@@ -79,8 +78,6 @@ public class Library {
 			this.loadMediaFromFile();
 		}
 		this.importedMusicNumber = this.listMedias.size();
-		this.importMedia(new Music("test2", "C:\\Users\\Théo\\Music\\Big_Data-Dangerous_(OliverRemix).mp3", 10.));
-		this.importMedia(new Music("test", "C:\\Users\\Théo\\Music\\MrKey_Trailer.mp3", 10.));
 	} 
 
 	/**
@@ -139,8 +136,6 @@ public class Library {
 	 * @param media The media object to import
 	 */
 	public void importMedia(Media media){
-
-		//TODO Adding ID to media in XML file ?
 
 		Element mediaNode = new Element("Media");
 		Element title = new Element("title");
