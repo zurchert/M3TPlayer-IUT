@@ -45,12 +45,16 @@ public class M3TPlayer{
 	 * The state of playing
 	 */
 	private boolean isPlaying;
-	
 
 	/**
 	 * The position of the music
 	 */
 	private int position;
+	
+	/**
+	 * The random generator
+	 */
+	private Random randomGenerator;
 	
 	/**
 	 * Initializes the player with default values.
@@ -65,22 +69,23 @@ public class M3TPlayer{
 		if(this.library.isEmpty())
 			this.currentMedia = null;
 		else
-			this.currentMedia = this.library.getMedia(32);
-		
+			this.currentMedia = this.library.getMedia(0);
+
 		this.player = null;
+		this.randomGenerator = new Random();
 	}
 	
 	/**
 	 * Switchs the random playing to on/off
 	 */
 	public void setRandomPlaying(){
-		int size = this.library.listMedias.size();
+		// TODO Fix
+		int maxRandId = this.library.getImportedMusicNumber();
 		if (this.randomPlaying)
-			this.randomPlaying=false;
+			this.randomPlaying = false;
 		else {
 			this.randomPlaying = true;
-			Random rdm = new Random();
-			this.currentMedia = this.library.getMedia(rdm.nextInt(size));			
+			this.currentMedia = this.library.getMedia(this.randomGenerator.nextInt(maxRandId));			
 		}
 	}
 	
@@ -94,13 +99,13 @@ public class M3TPlayer{
 	
 	
 	public void pause(){
+		// TODO Check method behavior
 		Player playing;
 		try {
 			playing = new Player(this.currentMedia.getStream());
 			this.position = playing.getPosition();
 			this.player.stop();
 		} catch (JavaLayerException e) {
-			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		}
 	}
@@ -131,13 +136,13 @@ public class M3TPlayer{
 	 *                <tt>NEXT</tt> to play the next media
 	 */
 	public void changeMedia(PlayingControl control){
-		int size = this.library.listMedias.size();
+		int size = this.library.getImportedMusicNumber();
 		if (!this.randomPlaying){
 			int mediaId = 0;
 			try {
 				mediaId = this.library.getMediaId(this.currentMedia);
-			} catch (UnknownMediaException e1) {
-				e1.printStackTrace();
+			} catch (UnknownMediaException e) {
+				e.printStackTrace();
 			}
 			switch (control) {
 				case PREVIOUS:
@@ -157,8 +162,7 @@ public class M3TPlayer{
 			this.currentMedia = this.library.getMedia(mediaId);
 		}
 		else{
-			Random rdm = new Random();
-			this.currentMedia = this.library.getMedia(rdm.nextInt(size));
+			this.currentMedia = this.library.getMedia(this.randomGenerator.nextInt(size));
 		}
 		this.playMedia();
 	}
