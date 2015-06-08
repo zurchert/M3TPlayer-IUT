@@ -69,13 +69,27 @@ public class M3TPlayer implements Runnable{
 		if(this.library.isEmpty())
 			this.currentMedia = null;
 		else
-			this.currentMedia = this.library.getMedia(1);
+			this.currentMedia = this.library.getMedia(0);
 
 		this.player = null;
 		this.randomGenerator = new Random();
 
 	}
 	
+	/**
+	 * @return the library
+	 */
+	public Library getLibrary() {
+		return library;
+	}
+
+	/**
+	 * @param library the library to define
+	 */
+	public void setLibrary(Library library) {
+		this.library = library;
+	}
+
 	/**
 	 * Switchs the random playing to on/off
 	 */
