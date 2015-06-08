@@ -30,7 +30,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "F:\\musics\\library.xml";
+	private final static String LIBRARY_PATH = "C:\\Users\\Théo\\Music\\library.xml";
 
 	/**
 	 * The library xml file
@@ -81,11 +81,7 @@ public class Library {
 			this.loadMediaFromFile();
 		}
 		this.importedMusicNumber = this.listMedias.size();
-		this.importMedia(new Music("1", "F:\\musics\\1.mp3", 1), true);
-		this.importMedia(new Music("1", "F:\\musics\\2.mp3", 1), true);
-		this.importMedia(new Music("1", "F:\\musics\\3.mp3", 1), true);
-		this.importMedia(new Music("1", "F:\\musics\\4.mp3", 1), true);
-		
+
 	} 
 
 	/**
