@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -15,6 +16,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import enumerations.MediaInformation;
 import fr.iutvalence.exceptions.UnknownMediaException;
 
 /**
@@ -186,6 +188,33 @@ public class Library {
 
 	}
 
+	/**
+	 * Update a specified media
+	 * @param id The id of the media
+	 * @param informations Map with the informations to update.
+	 * @throws UnknownMediaException Raised if there is no media matches with the id
+	 */
+	public void updateMedia(int id, Map<MediaInformation, String> informations) throws UnknownMediaException{
+		Element mediaToUpdate = this.getMediaNode(id);
+		if(mediaToUpdate == null) 
+			throw new UnknownMediaException();
+
+		// Get the keys of information Map
+		Set<MediaInformation> keys = informations.keySet();
+		Iterator<MediaInformation> keyIterator = keys.iterator();
+
+		while(keyIterator.hasNext()){
+			MediaInformation key = keyIterator.next();
+			Element mediaChild = mediaToUpdate.getChild(key.toString());
+			if(mediaChild != null){
+				System.out.println(informations.get(key));
+				mediaChild.setText(informations.get(key));
+			}
+		}
+
+		this.saveLibrary();
+	}
+	
 	/**
 	 * Returns a media by its given id
 	 * @param id The media's ID
