@@ -76,6 +76,9 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		    	 */
 		    	this.m3t.getLibrary().importMedia(new File(fileChooser.getSelectedFile().getPath()).getPath());
 
+		    	this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
+		    	this.getContentPane().add(this.musicListPanel, BorderLayout.CENTER);
+		    	
 		    	this.statusBar.displayMessage("The file has been correctly imported");
 		    }
 		}
@@ -142,5 +145,4 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	public void run() {
 		this.setVisible(true);
 	}
-	
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import fr.iutvalence.m3tplayer.Media;
 import fr.iutvalence.m3tplayer.Music;
@@ -12,6 +13,8 @@ import fr.iutvalence.m3tplayer.Music;
 public class MusicListPanel extends JScrollPane{
 
 	private JTable mediaTable;
+	
+	private DefaultTableModel tableModel;
 	
 	private Object[][] data;
 	
@@ -38,7 +41,6 @@ public class MusicListPanel extends JScrollPane{
 		while(iterator.hasNext()){
 
 			Music music = (Music) iterator.next();
-			
 			
 			this.data[line][0] = music.getTitle();
 			String album = music.getAlbum();
