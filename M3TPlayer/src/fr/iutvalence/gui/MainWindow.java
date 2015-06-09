@@ -4,12 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
@@ -22,12 +19,11 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 
 	private ControlButtonsPanel controllButtonsPanel;
 	
-	private M3TPlayer m3t = new M3TPlayer();
+	private M3TPlayer m3t;
 	
-	private JFrame frame = new JFrame();
+	private JFrame frame;
 	
-	private JLabel statusBar = new JLabel("State: Ready");
-
+	private StatusBar statusBar = new StatusBar();
 	
 	public MainWindow(){
 		
@@ -35,7 +31,13 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		
-		this.statusBar.setBorder(BorderFactory.createEtchedBorder());
+		new Thread(){
+			public void run(){
+				MainWindow.this.m3t = new M3TPlayer();
+			}
+		}.start();
+		
+		this.frame = new JFrame();
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
 		this.getContentPane().add(this.controllButtonsPanel);
@@ -43,12 +45,6 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		
 		this.pack();
 	}
-	
-	ActionListener taskPerformer = new ActionListener() {
-		public void actionPerformed(ActionEvent evt) {
-			MainWindow.this.statusBar.setText("Status: Ready");
-		}
-	};
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -70,35 +66,17 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		    	 */
 		    	this.m3t.getLibrary().importMedia(new Music("music", fileChooser.getSelectedFile().getPath(), 10.), true);
 
-		    	int delay = 2000; //milliseconds
-		    	Timer timer = new Timer(delay, this.taskPerformer);
-		    	timer.start();
-		    	
-		    	this.statusBar.setText(this.statusBar.getText() + " The file has been correctly imported");
+		    	this.statusBar.displayMessage("The file has been correctly imported");
 		    }
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
+			new Thread() {
+				public void run() {
+					MainWindow.this.m3t.playMedia();
+				}
+			}.start();
 			
-			this.controllButtonsPanel.getPlayButton().addActionListener(
-					  new ActionListener() {
-					    
-
-						public void actionPerformed(ActionEvent e) {
-					      // création d'un thread d'exécution
-					    
-					      Thread t = new Thread() {
-					        public void run() {
-					          // Instanciation et lancement du traitement
-					        	M3TPlayer m3t = new M3TPlayer();
-					        	m3t.playMedia();
-					        }
-					      };
-					      t.start();
-					    }
-					  }
-					);
-			//this.m3t.playMedia();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
@@ -113,7 +91,6 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 			this.m3t.setRandomPlaying();
 		}
 	}
-
 	
 	@Override
 	public void run() {
