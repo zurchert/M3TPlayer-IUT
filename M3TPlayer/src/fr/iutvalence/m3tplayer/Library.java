@@ -3,7 +3,6 @@ package fr.iutvalence.m3tplayer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -44,7 +42,7 @@ public class Library {
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "F:\\musics\\library.xml";
+	private final static String LIBRARY_PATH = "library.xml";
 
 	/**
 	 * The library xml file
@@ -85,7 +83,7 @@ public class Library {
 		else{
 			// Loads the xml file
 			try {
-				this.libraryFile = new SAXBuilder().build(new File(LIBRARY_PATH));
+				this.libraryFile = new SAXBuilder().build(LIBRARY_PATH);
 			} catch (JDOMException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
