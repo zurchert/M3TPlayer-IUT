@@ -12,6 +12,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
 import fr.iutvalence.m3tplayer.M3TPlayer;
+import fr.iutvalence.m3tplayer.Media;
 
 public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
@@ -28,6 +29,10 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	private StatusBar statusBar;
 	
 	private MusicListPanel musicListPanel;
+	
+	private Media currentMedia;
+	
+	private boolean isRandom;
 	
 	public MainWindow(){
 		
@@ -81,6 +86,8 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 					public void run() {
 						if(!MainWindow.this.m3t.isPausing()){
 								MainWindow.this.m3t = new M3TPlayer();
+//								if(isRandom)
+//									MainWindow.this.m3t = new M3TPlayer(MainWindow.this.currentMedia);
 								MainWindow.this.m3t.playMedia();
 						}
 						else MainWindow.this.m3t.playMedia();
@@ -101,6 +108,9 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		if(source.equals(this.controllButtonsPanel.getNextButton())){			
 			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.NEXT);
+			//Media currentMedia = this.m3t.getLibrary().getMedia(this.m3t.getMediaId());
+			//this.m3t = new M3TPlayer();
+			//this.m3t.setCurretnMedia(currentMedia);
 			this.t = new Thread() {
 				public void run() {
 					MainWindow.this.m3t.playMedia();				
@@ -126,13 +136,16 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
 			if (this.m3t.isPlaying()){
 				this.t.stop();
-				MainWindow.this.m3t.setCurrentMedia(MainWindow.this.m3t.getLibrary().getMedia(0));
+				MainWindow.this.m3t.setCurretnMedia(MainWindow.this.m3t.getLibrary().getMedia(0));
 				this.m3t.setPlaying(false);
 			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getRandomButton())){
-			this.m3t.setRandomPlaying();
+			M3TPlayer m3tRandom = new M3TPlayer();
+			m3tRandom.setRandomPlaying();
+			this.currentMedia = m3tRandom.getCurrentMedia();
+			this.isRandom = true;
 		}
 	}
 	

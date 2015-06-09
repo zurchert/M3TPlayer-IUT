@@ -58,6 +58,8 @@ public class M3TPlayer{
 
 	private boolean isPausing;
 	
+	private int mediaId;
+	
 	/**
 	 * Initializes the player with default values.
 	 * Sets the volume to 100 percent, and the random mode to false, and the identifiant to 0.
@@ -79,12 +81,27 @@ public class M3TPlayer{
 
 	}
 	
+//	public M3TPlayer(Media media) {
+//		this.library = new Library();
+//		this.volume = 100;
+//		this.randomPlaying = false;
+//		this.isPlaying = false;
+//		this.isPausing = false;
+//		this.position = 0;
+//		this.currentMedia = media;
+//
+//		this.player = null;
+//		this.randomGenerator = new Random();
+//
+//	}
+	
 	/**
-	 * @param currentMedia le currentMedia à définir
+	 * @return le mediaId
 	 */
-	public void setCurrentMedia(Media currentMedia) {
-		this.currentMedia = currentMedia;
+	public int getMediaId() {
+		return mediaId;
 	}
+
 
 	/**
 	 * @return the library
@@ -163,26 +180,26 @@ public class M3TPlayer{
 	public void changeMedia(PlayerControl control){
 		int size = this.library.getImportedMusicNumber();
 		if (!this.randomPlaying){
-			int mediaId = 0;
+			this.mediaId = 0;
 
-			mediaId = this.library.getMediaId(this.currentMedia);
+			this.mediaId = this.library.getMediaId(this.currentMedia);
 
 			switch (control) {
 				case PREVIOUS:
-					mediaId -= 1;
-					if (mediaId < 0)
-						mediaId = size-1;
+					this.mediaId -= 1;
+					if (this.mediaId < 0)
+						this.mediaId = size-1;
 					break;
 				case NEXT:
-					mediaId += 1;
-					if (mediaId >= size)
-						mediaId = 0;
+					this.mediaId += 1;
+					if (this.mediaId >= size)
+						this.mediaId = 0;
 					break;
 				default:
 					break;
 			}
 			
-			this.currentMedia = this.library.getMedia(mediaId);
+			this.currentMedia = this.library.getMedia(this.mediaId);
 		}
 		else{
 			this.currentMedia = this.library.getMedia(this.randomGenerator.nextInt(size));
@@ -207,11 +224,13 @@ public class M3TPlayer{
 	public void playMedia(){
 		try {
 			this.player = new AdvancedPlayer(this.currentMedia.getStream());
-			this.isPlaying = true;
-			this.player.play(this.position, Integer.MAX_VALUE);
-			while (this.isPlaying){
-				this.changeMedia(PlayerControl.NEXT);
-				this.player.play();
+			   this.isPlaying = true;
+			   this.player.play(0, Integer.MAX_VALUE);
+			   while (this.isPlaying){
+			    this.changeMedia(PlayerControl.NEXT);
+			    this.player = new AdvancedPlayer(this.currentMedia.getStream());
+			    this.player.play(0, Integer.MAX_VALUE);
+			  
 			}
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
