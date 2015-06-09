@@ -1,5 +1,11 @@
 package enumerations;
 
+
+/**
+ *  Enumeration which  gives informations about the music
+ * @author klimczam
+ *
+ */
 public enum MediaInformation {
 
 	TITLE("title"),

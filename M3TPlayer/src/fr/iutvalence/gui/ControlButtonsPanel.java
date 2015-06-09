@@ -5,23 +5,57 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * class to the control of different buttons
+ */
 public class ControlButtonsPanel extends JPanel{
 	
+	/**
+	 * button to play the music
+	 */
 	private JButton playButton;
 	
+	/**
+	 * the button to go to the next music
+	 */
 	private JButton nextButton;
 	
+	/**
+	 * the button to go to the previous music
+	 */
 	private JButton previousButton;
 	
+	/**
+	 * the button to get the mode random
+	 */
+	
 	private JButton randomButton;
+	
+	/**
+	 * the button to import some music
+	 */
 
 	private JButton importButton;
 	
+	/**
+	 * the button to validate the importation
+	 */
+	
 	private JButton validButton;
+	
+	/**
+	 * the button to go to stop the playingmusic
+	 */
 	
 	private JButton stopButton;
 	
 	private String nameButtonPlay;
+	
+	/**
+	 * actionlistener to gives the role of any buttons
+	 * @param listener
+	 */
 	
 	public ControlButtonsPanel(ActionListener listener) {
 		super();
