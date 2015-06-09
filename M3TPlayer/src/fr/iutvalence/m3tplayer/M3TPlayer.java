@@ -69,7 +69,7 @@ public class M3TPlayer{
 		if(this.library.isEmpty())
 			this.currentMedia = null;
 		else
-			this.currentMedia = this.library.getMedia(2);
+			this.currentMedia = this.library.getMedia(0);
 
 		this.player = null;
 		this.randomGenerator = new Random();

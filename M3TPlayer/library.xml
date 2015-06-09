@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <M3TPlayer>
+  <Media id="0" media="music">
+    <artist />
+    <album />
+    <rating>0</rating>
+    <lenght />
+    <title>Come With Me Now - Kongos (High Quality Sound)</title>
+    <path>C:\Users\Théo\Music\Come With Me Now - Kongos (High Quality Sound).mp3</path>
+  </Media>
 </M3TPlayer>

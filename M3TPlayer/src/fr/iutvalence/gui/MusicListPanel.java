@@ -38,7 +38,6 @@ public class MusicListPanel extends JScrollPane{
 		while(iterator.hasNext()){
 
 			Music music = (Music) iterator.next();
-			System.out.println(music);
 			
 			
 			this.data[line][0] = music.getTitle();
