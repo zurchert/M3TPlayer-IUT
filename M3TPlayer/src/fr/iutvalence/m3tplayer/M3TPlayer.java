@@ -13,7 +13,7 @@ import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 import enumerations.PlayerControl;
 
-public class M3TPlayer implements Runnable{
+public class M3TPlayer{
 
 	/**
 	 * The volume of the player.
@@ -80,7 +80,7 @@ public class M3TPlayer implements Runnable{
 	 * @return the library
 	 */
 	public Library getLibrary() {
-		return library;
+		return this.library;
 	}
 
 	/**
@@ -197,11 +197,6 @@ public class M3TPlayer implements Runnable{
 		} catch(NullPointerException e){
 			System.out.println("No media to play ! (the source does not exists)");
 		}
-	}
-
-	@Override
-	public void run() {
-		this.playMedia();
 	}
 	
 }
