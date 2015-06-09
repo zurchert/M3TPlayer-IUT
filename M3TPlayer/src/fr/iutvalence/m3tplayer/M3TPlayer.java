@@ -69,13 +69,20 @@ public class M3TPlayer{
 		if(this.library.isEmpty())
 			this.currentMedia = null;
 		else
-			this.currentMedia = this.library.getMedia(0);
+			this.currentMedia = this.library.getMedia(2);
 
 		this.player = null;
 		this.randomGenerator = new Random();
 
 	}
 	
+	/**
+	 * @param currentMedia le currentMedia à définir
+	 */
+	public void setCurrentMedia(Media currentMedia) {
+		this.currentMedia = currentMedia;
+	}
+
 	/**
 	 * @return the library
 	 */
@@ -181,7 +188,7 @@ public class M3TPlayer{
 	}
 	
 	/**
-	 * @return le currentMedia
+	 * @return the currentMedia
 	 */
 	public Media getCurrentMedia() {
 		return currentMedia;
@@ -197,13 +204,20 @@ public class M3TPlayer{
 			this.player.play(this.position, Integer.MAX_VALUE);
 			while (this.isPlaying){
 				this.changeMedia(PlayerControl.NEXT);
-				this.playMedia();
+				this.player.play();
 			}
 		} catch (JavaLayerException e) {
 			e.printStackTrace();
 		} catch(NullPointerException e){
 			System.out.println("No media to play ! (the source does not exists)");
 		}
+	}
+
+	/**
+	 * @return the isPlaying
+	 */
+	public boolean isPlaying() {
+		return isPlaying;
 	}
 	
 }
