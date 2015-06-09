@@ -67,6 +67,7 @@ public class M3TPlayer{
 		this.volume = 100;
 		this.randomPlaying = false;
 		this.isPlaying = false;
+		this.isPausing = false;
 		this.position = 0;
 		if(this.library.isEmpty())
 			this.currentMedia = null;
