@@ -11,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
 import fr.iutvalence.m3tplayer.M3TPlayer;
+import fr.iutvalence.m3tplayer.Media;
 import fr.iutvalence.m3tplayer.Music;
 
 public class MainWindow extends JFrame implements ActionListener, Runnable{
@@ -20,6 +21,10 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	private ControlButtonsPanel controllButtonsPanel;
 	
 	private M3TPlayer m3t;
+	
+	private Thread t;
+	
+	private Media currentMedia;
 	
 	private JFrame frame;
 	
@@ -71,16 +76,27 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			new Thread() {
+			this.t = new Thread() {
 				public void run() {
-					MainWindow.this.m3t.playMedia();
+					MainWindow.this.m3t = new M3TPlayer();
+					MainWindow.this.m3t.playMedia();				
 				}
-			}.start();
+			};
+			this.currentMedia = MainWindow.this.m3t.getCurrentMedia();
+			this.t.start();
 			
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
+			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.NEXT);
+			this.t = new Thread() {
+				public void run() {
+					MainWindow.this.m3t.playMedia();				
+				}
+			};
+			this.currentMedia = MainWindow.this.m3t.getCurrentMedia();
+			this.t.start();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){
