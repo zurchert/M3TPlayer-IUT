@@ -1,10 +1,5 @@
 package fr.iutvalence.m3tplayer;
 
-import java.awt.image.BufferedImageFilter;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class Music extends Media{
 	
@@ -21,7 +16,7 @@ public class Music extends Media{
 	/**
 	 * The music's lenght in seconds
 	 */
-	private final double lenght;
+	private final int lenght;
 	
 	/**
 	 * The music's rating.
@@ -38,7 +33,7 @@ public class Music extends Media{
 	 * @param lenght The lenght of the music
 	 * @see fr.iutvalence.m3tplayer.Media
 	 */
-	public Music(String title, String path, double lenght) {
+	public Music(String title, String path, int lenght) {
 		super(title, path);
 		this.album = null;
 		this.artist = null;
@@ -56,7 +51,7 @@ public class Music extends Media{
 	 * @param album  The album of the music
 	 * @see fr.iutvalence.m3tplayer.Media
 	 */
-	public Music(String title, String path, long lenght, String artist, String album) {
+	public Music(String title, String path, int lenght, String artist, String album) {
 		super(title, path);
 		this.artist = artist;
 		this.album = album;
