@@ -101,7 +101,6 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 			};
 			this.t.start();
 			this.played = true;
-			this.paused = false;
 			}
 			else {
 				this.t.stop();
@@ -125,7 +124,15 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){
+			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.PREVIOUS);
+			this.t = new Thread() {
+				public void run() {
+					MainWindow.this.m3t.playMedia();				
+				}
+			};
+			this.mediaCurrent = MainWindow.this.m3t.getCurrentMedia();
+			this.t.start();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
