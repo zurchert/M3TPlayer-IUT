@@ -2,7 +2,7 @@ package fr.iutvalence.utils;
 
 import java.util.Map;
 
-public class Utils {
+public class Utils<E> {
 
 	public static Object getKeyFromValue(Map hm, Object value) {
 		for (Object o : hm.keySet()) {
@@ -13,4 +13,8 @@ public class Utils {
 		return null;
 	}
 	
+	
+	public static <E> E getLastArrayElement(E[] array){
+		return array[array.length - 1];
+	}
 }
