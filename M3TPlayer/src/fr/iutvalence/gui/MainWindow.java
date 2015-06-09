@@ -26,6 +26,10 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
 	private Media currentMedia;
 	
+	private boolean played;
+	
+	private boolean paused;
+	
 	private JFrame frame;
 	
 	private StatusBar statusBar = new StatusBar();
@@ -39,7 +43,8 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		this.setLayout(new BorderLayout());
 		
 		this.m3t = new M3TPlayer();
-		
+		this.played = false;
+		this.paused = false;
 		this.frame = new JFrame();
 		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
 		
@@ -76,31 +81,52 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
+			if(!played){
 			this.t = new Thread() {
 				public void run() {
-					MainWindow.this.m3t = new M3TPlayer();
-					MainWindow.this.m3t.playMedia();				
+					if(!MainWindow.this.paused){
+						MainWindow.this.m3t = new M3TPlayer();
+						MainWindow.this.m3t.playMedia();	
+					}
+					else MainWindow.this.m3t.playMedia();
+									
 				}
 			};
-			this.currentMedia = MainWindow.this.m3t.getCurrentMedia();
 			this.t.start();
-			
+			this.played = true;
+			}
+			else {
+				this.t.stop();
+				this.paused=true;
+				this.played = false;
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
-			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.NEXT);
-			this.t = new Thread() {
-				public void run() {
-					MainWindow.this.m3t.playMedia();				
-				}
-			};
-			this.currentMedia = MainWindow.this.m3t.getCurrentMedia();
-			this.t.start();
+			this.currentMedia = this.m3t.getCurrentMedia();
+			if (this.played){
+				this.t.stop();
+				this.t = new Thread() {				
+						public void run() {
+							MainWindow.this.m3t = new M3TPlayer();
+							MainWindow.this.m3t.setCurrentMedia(MainWindow.this.currentMedia);
+							MainWindow.this.m3t.playMedia();														
+						}
+				};
+				this.t.start();
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){
 			this.m3t.changeMedia(PlayerControl.PREVIOUS);
+		}
+		
+		if(source.equals(this.controllButtonsPanel.getStopButton())){
+			if (this.played){
+				this.t.stop();
+				this.played = false;
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getRandomButton())){

@@ -19,19 +19,26 @@ public class ControlButtonsPanel extends JPanel{
 	
 	private JButton validButton;
 	
+	private JButton stopButton;
+	
+	private String nameButtonPlay;
+	
 	public ControlButtonsPanel(ActionListener listener) {
 		super();
-		this.playButton = new JButton("Play");
+		this.nameButtonPlay = "Play";
+		this.playButton = new JButton(this.nameButtonPlay);
 		this.nextButton = new JButton("Next");
 		this.previousButton = new JButton("Previous");
 		this.randomButton = new JButton("Random");
 		this.importButton = new JButton("Import");
 		this.validButton = new JButton("OK");	
+		this.stopButton = new JButton("Stop");
 		
 		this.add(this.importButton);
 		this.add(this.previousButton);
 		this.add(this.playButton);
 		this.add(this.nextButton);
+		this.add(this.stopButton);
 		this.add(this.randomButton);
 		
 		this.importButton.addActionListener(listener);
@@ -40,6 +47,23 @@ public class ControlButtonsPanel extends JPanel{
 		this.previousButton.addActionListener(listener);
 		this.randomButton.addActionListener(listener);
 		this.validButton.addActionListener(listener);
+		this.stopButton.addActionListener(listener);
+	}
+
+
+	/**
+	 * @param nameButtonPlay le nameButtonPlay à définir
+	 */
+	public void setNameButtonPlay(String nameButtonPlay) {
+		this.nameButtonPlay = nameButtonPlay;
+	}
+
+
+	/**
+	 * @return the stopButton
+	 */
+	public JButton getStopButton() {
+		return stopButton;
 	}
 
 
