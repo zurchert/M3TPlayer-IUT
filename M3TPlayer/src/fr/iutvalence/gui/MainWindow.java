@@ -3,6 +3,7 @@ package fr.iutvalence.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -69,7 +70,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		    	 *    - album
 		    	 *    - lenght
 		    	 */
-		    	this.m3t.getLibrary().importMedia(new Music("music", fileChooser.getSelectedFile().getPath(), 10.), true);
+		    	this.m3t.getLibrary().importMedia(new File(fileChooser.getSelectedFile().getPath()).getPath());
 
 		    	this.statusBar.displayMessage("The file has been correctly imported");
 		    }
@@ -88,14 +89,12 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
-			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.NEXT);
 			this.t = new Thread() {
 				public void run() {
 					MainWindow.this.m3t.playMedia();				
 				}
 			};
-			this.currentMedia = MainWindow.this.m3t.getCurrentMedia();
 			this.t.start();
 		}
 		
