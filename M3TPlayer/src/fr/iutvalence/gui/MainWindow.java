@@ -25,22 +25,22 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
 	private StatusBar statusBar = new StatusBar();
 	
+	private MusicListPanel musicListPanel;
+	
 	public MainWindow(){
 		
 		this.setTitle(APP_TITLE);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		
-		new Thread(){
-			public void run(){
-				MainWindow.this.m3t = new M3TPlayer();
-			}
-		}.start();
+		this.m3t = new M3TPlayer();
 		
 		this.frame = new JFrame();
+		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
-		this.getContentPane().add(this.controllButtonsPanel);
+		this.getContentPane().add(this.controllButtonsPanel, BorderLayout.NORTH);
+		this.getContentPane().add(this.musicListPanel, BorderLayout.CENTER);
 		this.getContentPane().add(this.statusBar, BorderLayout.SOUTH);
 		
 		this.pack();
