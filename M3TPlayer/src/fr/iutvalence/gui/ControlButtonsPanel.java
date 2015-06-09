@@ -52,7 +52,7 @@ public class ControlButtonsPanel extends JPanel{
 
 
 	/**
-	 * @param nameButtonPlay le nameButtonPlay à définir
+	 * @param nameButtonPlay the nameButtonPlay to define
 	 */
 	public void setNameButtonPlay(String nameButtonPlay) {
 		this.nameButtonPlay = nameButtonPlay;
