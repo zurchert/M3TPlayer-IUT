@@ -21,7 +21,7 @@ public class MusicListPanel extends JScrollPane{
 		super();
 		this.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 		this.medias = medias;
-		String[] headers = {"Title", "Path", "Lenght", "Rating"};
+		String[] headers = {"Title", "Album", "Artist", "Lenght", "Rating"};
 		this.parseMediaList();
 		this.mediaTable = new JTable(this.data, headers);
 		this.add(this.mediaTable);
@@ -33,21 +33,25 @@ public class MusicListPanel extends JScrollPane{
 		int line = 0;
 		Iterator<Media> iterator = this.medias.values().iterator();
 		
-		this.data = new Object[this.medias.size()][4];
+		this.data = new Object[this.medias.size()][5];
 		
 		while(iterator.hasNext()){
-			Media media = (Media) iterator.next();
-			this.data[line][0] = media.getTitle();
-			this.data[line][1] = media.getPath();
-			if(media.getClass().equals(Music.class)){
-				Music music = (Music) media;
-				this.data[line][2] = music.getLenght();
-				this.data[line][3] = music.getRating();
-			}
-			else{
-				this.data[line][2] = null;
-				this.data[line][3] = null;
-			}
+
+			Music music = (Music) iterator.next();
+			System.out.println(music);
+			
+			
+			this.data[line][0] = music.getTitle();
+			String album = music.getAlbum();
+			String artist = music.getArtist();
+			if(music.getAlbum() == "")
+				album = "Unknow";
+			if(music.getArtist() == null)
+				artist = "Unknow";
+			this.data[line][1] = album;
+			this.data[line][2] = artist;
+			this.data[line][3] = music.getRating();
+			
 			line++;
 		}
 	}
