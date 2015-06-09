@@ -94,11 +94,13 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 			};
 			this.t.start();
 			this.played = true;
+			this.controllButtonsPanel.setNameButtonPlay("Pause");
 			}
 			else {
 				this.t.stop();
 				this.paused=true;
 				this.played = false;
+				this.controllButtonsPanel.setNameButtonPlay("Play");
 			}
 		}
 		
