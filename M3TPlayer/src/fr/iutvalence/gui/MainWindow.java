@@ -12,7 +12,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
 import fr.iutvalence.m3tplayer.M3TPlayer;
-import fr.iutvalence.m3tplayer.Media;
 
 public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
@@ -24,16 +23,9 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
 	private Thread t;
 	
-	private Media mediaCurrent;
-	
-	private boolean played;
-	
-	private boolean paused;
-	
 	private JFrame frame;
-
 	
-	private StatusBar statusBar = new StatusBar();
+	private StatusBar statusBar;
 	
 	private MusicListPanel musicListPanel;
 	
@@ -44,11 +36,9 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		this.setLayout(new BorderLayout());
 		
 		this.m3t = new M3TPlayer();
-		this.played = false;
-		this.paused = false;
 		this.frame = new JFrame();
 		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
-		this.mediaCurrent = this.m3t.getLibrary().getMedia(0);
+		this.statusBar = new StatusBar();
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
 		this.getContentPane().add(this.controllButtonsPanel, BorderLayout.NORTH);
@@ -86,27 +76,25 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			if(!played){
-			this.t = new Thread() {
-				public void run() {
-					if(!MainWindow.this.paused){
-						
-							MainWindow.this.m3t = new M3TPlayer();
-							MainWindow.this.m3t.playMedia();
-						
+			if(!this.m3t.isPlaying()){
+				this.t = new Thread() {
+					public void run() {
+						if(!MainWindow.this.m3t.isPausing()){
+								MainWindow.this.m3t = new M3TPlayer();
+								MainWindow.this.m3t.playMedia();
+						}
+						else MainWindow.this.m3t.playMedia();
+										
 					}
-					else MainWindow.this.m3t.playMedia();
-									
-				}
-			};
-			this.t.start();
-			this.played = true;
-			this.paused = false;
+				};
+				this.t.start();
+				this.m3t.setPlaying(true);
+				this.m3t.setPausing(false);
 			}
 			else {
 				this.t.stop();
-				this.paused=true;
-				this.played = false;
+				this.m3t.setPlaying(false);
+				this.m3t.setPausing(true);
 			}
 		}
 		
@@ -118,7 +106,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 					MainWindow.this.m3t.playMedia();				
 				}
 			};
-			this.mediaCurrent = MainWindow.this.m3t.getCurrentMedia();
+
 			this.t.start();
 			
 
@@ -129,10 +117,10 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
-			if (this.played){
+			if (this.m3t.isPlaying()){
 				this.t.stop();
-				MainWindow.this.mediaCurrent = MainWindow.this.m3t.getLibrary().getMedia(0);
-				this.played = false;
+				MainWindow.this.m3t.setCurrentMedia(MainWindow.this.m3t.getLibrary().getMedia(0));
+				this.m3t.setPlaying(false);
 			}
 		}
 		

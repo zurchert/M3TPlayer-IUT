@@ -55,6 +55,8 @@ public class M3TPlayer{
 	 * The random generator
 	 */
 	private Random randomGenerator;
+
+	private boolean isPausing;
 	
 	/**
 	 * Initializes the player with default values.
@@ -191,9 +193,13 @@ public class M3TPlayer{
 	 * @return the currentMedia
 	 */
 	public Media getCurrentMedia() {
-		return currentMedia;
+		return this.currentMedia;
 	}
 
+	public void setCurretnMedia(Media media){
+		this.currentMedia = media;
+	}
+	
 	/**
 	 * Plays the current media
 	 */
@@ -217,7 +223,25 @@ public class M3TPlayer{
 	 * @return the isPlaying
 	 */
 	public boolean isPlaying() {
-		return isPlaying;
+		return this.isPlaying;
+	}
+
+	/**
+	 * @param isPlaying the isPlaying to set
+	 */
+	public void setPlaying(boolean isPlaying) {
+		this.isPlaying = isPlaying;
+	}
+
+	public boolean isPausing() {
+		return this.isPausing;
+	}
+
+	/**
+	 * @param isPausing the isPausing to set
+	 */
+	public void setPausing(boolean isPausing) {
+		this.isPausing = isPausing;
 	}
 	
 }
