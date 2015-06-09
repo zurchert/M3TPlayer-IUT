@@ -3,12 +3,24 @@ package fr.iutvalence.m3tplayer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -26,11 +38,13 @@ import fr.iutvalence.utils.Utils;
  */
 public class Library {
 
+	//TODO ADD LENGHT
+	
 	/**
 	 * The library xml file path on the hard-drive.
 	 * 
 	 */
-	private final static String LIBRARY_PATH = "C:\\Users\\Théo\\Music\\library.xml";
+	private final static String LIBRARY_PATH = "F:\\musics\\library.xml";
 
 	/**
 	 * The library xml file
@@ -99,22 +113,24 @@ public class Library {
 	public void loadMediaFromFile(){
 		int mediaId = 0;
 		Element media;
+		Media mediaToImport = null;
 		while((media = this.getMediaNode(mediaId)) != null){
-			// If the media is a music
-			String title = media.getChildText("title");
-			String path = media.getChildText("path");
-			
-			if(media.getAttributeValue("media") == "music"){
-				String artist = media.getChildText("artist");
-				String album = media.getChildText("album");
-				this.importMedia(new Music(title, path, 10, artist, album), false); // TODO change music lenght
-			} else{
-				this.importMedia(new Radio(title, path), false);
+			if(media.getChildText("path").startsWith("http://")){
+				mediaToImport = new Radio(media.getChildText("path"), media.getChildText("path"));
 			}
+			else{
+				mediaToImport = new Music(media.getChildText("title"), media.getChildText("path"), 
+						10, media.getChildText("artist"), media.getChildText("album"));
+			}
+			this.importWithoutAddingToFile(mediaToImport); // TODO change music lengh
 			mediaId++;
 		}
 	}
 
+	public void importWithoutAddingToFile(Media media){
+		this.listMedias.put(this.importedMusicNumber++, media);
+	}
+	
 	/**
 	 * Returns the media node which maches with a given id
 	 * @param id The id of the media
@@ -138,51 +154,85 @@ public class Library {
 	/**
 	 * Imports a media into the library file
 	 * @param media The media object to import
-	 * @param addToLibraryFile <tt>true</tt> if you want to add the media into the library file,
-	 *                         <tt>false</tt> if you only want to add the media in the list.
 	 */
-	public void importMedia(Media media, boolean addToLibraryFile){
+	public void importMedia(String path){
+
+		Media media = null;
 
 		Element mediaNode = new Element("Media");
 		Element title = new Element("title");
 		Element audioPath = new Element("path");
 
-
 		mediaNode.setAttribute("id", Integer.toString(this.importedMusicNumber));
-		
-		if(addToLibraryFile){
-			// If the media is a Radio
-			if(media.getClass().equals(Radio.class)){
-				mediaNode.setAttribute("media", "radio");
-			}
 
-			// If it is a Music
-			else{
-				mediaNode.setAttribute("media", "music");
 
-				Music music = (Music) media;
-				Element artist = new Element("artist");
-				Element album = new Element("album");
-				Element rating = new Element("rating");
-
-				// Set the rating to 0 (default value)
-				rating.setText(Integer.toString(music.getRating()));
-				artist.setText(music.getArtist());
-				album.setText(music.getAlbum());
-				title.setText(music.getTitle());
-
-				mediaNode.addContent(artist);
-				mediaNode.addContent(album);
-				mediaNode.addContent(rating);
-			}
-
-			audioPath.setText(media.getPath());
-
-			mediaNode.addContent(title);
-			mediaNode.addContent(audioPath);
-
-			this.libraryFile.getRootElement().addContent(mediaNode);
+		// If the media is a Radio
+		if(path.startsWith("http://")){
+			mediaNode.setAttribute("media", "radio");
+			media = new Radio(path, path);
 		}
+
+		// If it is a Music
+		else{
+			MP3File f = null;
+
+			try {
+				f = (MP3File) AudioFileIO.read(new File((path)));
+			} catch (CannotReadException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (TagException e) {
+				e.printStackTrace();
+			} catch (ReadOnlyFileException e) {
+				e.printStackTrace();
+			} catch (InvalidAudioFrameException e) {
+				e.printStackTrace();
+			}
+			MP3AudioHeader audioHeader = f.getMP3AudioHeader();
+			Tag tag = f.getTag();
+
+
+			mediaNode.setAttribute("media", "music");
+
+			Element artist = new Element("artist");
+			Element album = new Element("album");
+			Element rating = new Element("rating");
+			Element lenght = new Element("lenght");
+
+			String titleText = null;
+			String albumText = tag.getFirst(FieldKey.ARTIST);
+			String artistText = tag.getFirst(FieldKey.ALBUM);
+			int lenghtText = audioHeader.getTrackLength();
+
+			// Set the rating to 0 (default value)
+			rating.setText(Integer.toString(0));
+			artist.setText(albumText);
+			album.setText(artistText);
+
+			if(tag.getFirst(FieldKey.TITLE) == ""){
+				titleText = Utils.getLastArrayElement(path.split(Pattern.quote(File.separator)));
+				titleText = titleText.split(Pattern.quote("."))[0];
+				title.setText(titleText);
+			}
+			else{
+				titleText = tag.getFirst(FieldKey.TITLE);
+				title.setText(titleText);
+			}
+
+			mediaNode.addContent(artist);
+			mediaNode.addContent(album);
+			mediaNode.addContent(rating);
+			mediaNode.addContent(lenght);
+			media = new Music(titleText, path, lenghtText, artistText, albumText);
+		}
+
+		audioPath.setText(path);
+
+		mediaNode.addContent(title);
+		mediaNode.addContent(audioPath);
+
+		this.libraryFile.getRootElement().addContent(mediaNode);
 
 		this.listMedias.put(this.importedMusicNumber++, media);
 
