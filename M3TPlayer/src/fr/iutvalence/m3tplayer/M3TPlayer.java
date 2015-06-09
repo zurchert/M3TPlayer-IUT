@@ -181,6 +181,13 @@ public class M3TPlayer{
 	}
 	
 	/**
+	 * @return le currentMedia
+	 */
+	public Media getCurrentMedia() {
+		return currentMedia;
+	}
+
+	/**
 	 * Plays the current media
 	 */
 	public void playMedia(){
