@@ -79,8 +79,26 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			this.m3t = new M3TPlayer();
-			this.m3t.playMedia();
+			
+			this.controllButtonsPanel.getPlayButton().addActionListener(
+					  new ActionListener() {
+					    
+
+						public void actionPerformed(ActionEvent e) {
+					      // création d'un thread d'exécution
+					    
+					      Thread t = new Thread() {
+					        public void run() {
+					          // Instanciation et lancement du traitement
+					        	M3TPlayer m3t = new M3TPlayer();
+					        	m3t.playMedia();
+					        }
+					      };
+					      t.start();
+					    }
+					  }
+					);
+			//this.m3t.playMedia();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){
@@ -96,6 +114,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 	}
 
+	
 	@Override
 	public void run() {
 		this.setVisible(true);
