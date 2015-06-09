@@ -24,13 +24,14 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 	
 	private Thread t;
 	
-	private Media currentMedia;
+	private Media mediaCurrent;
 	
 	private boolean played;
 	
 	private boolean paused;
 	
 	private JFrame frame;
+
 	
 	private StatusBar statusBar = new StatusBar();
 	
@@ -47,6 +48,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		this.paused = false;
 		this.frame = new JFrame();
 		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
+		this.mediaCurrent = this.m3t.getLibrary().getMedia(0);
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
 		this.getContentPane().add(this.controllButtonsPanel, BorderLayout.NORTH);
@@ -88,8 +90,10 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 			this.t = new Thread() {
 				public void run() {
 					if(!MainWindow.this.paused){
-						MainWindow.this.m3t = new M3TPlayer();
-						MainWindow.this.m3t.playMedia();	
+						
+							MainWindow.this.m3t = new M3TPlayer();
+							MainWindow.this.m3t.playMedia();
+						
 					}
 					else MainWindow.this.m3t.playMedia();
 									
@@ -97,31 +101,26 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 			};
 			this.t.start();
 			this.played = true;
-			this.controllButtonsPanel.setNameButtonPlay("Pause");
+			this.paused = false;
 			}
 			else {
 				this.t.stop();
 				this.paused=true;
 				this.played = false;
-				this.controllButtonsPanel.setNameButtonPlay("Play");
 			}
 		}
 		
-		if(source.equals(this.controllButtonsPanel.getNextButton())){
+		if(source.equals(this.controllButtonsPanel.getNextButton())){			
+			this.t.stop();
 			this.m3t.changeMedia(PlayerControl.NEXT);
-
-			this.currentMedia = this.m3t.getCurrentMedia();
-			if (this.played){
-				this.t.stop();
-				this.t = new Thread() {				
-						public void run() {
-							MainWindow.this.m3t = new M3TPlayer();
-							MainWindow.this.m3t.setCurrentMedia(MainWindow.this.currentMedia);
-							MainWindow.this.m3t.playMedia();														
-						}
-				};
-				this.t.start();
-			}
+			this.t = new Thread() {
+				public void run() {
+					MainWindow.this.m3t.playMedia();				
+				}
+			};
+			this.mediaCurrent = MainWindow.this.m3t.getCurrentMedia();
+			this.t.start();
+			
 
 		}
 		
@@ -132,6 +131,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
 			if (this.played){
 				this.t.stop();
+				MainWindow.this.mediaCurrent = MainWindow.this.m3t.getLibrary().getMedia(0);
 				this.played = false;
 			}
 		}
