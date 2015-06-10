@@ -51,6 +51,11 @@ public class MainWindow extends JFrame implements ActionListener, Runnable, Mous
 	 */
 	private MusicListPanel musicListPanel;
 	
+	/**
+	 * Check if the media is started
+	 */
+	private boolean isStarted;
+	
 	public MainWindow(){
 		
 		this.setTitle(APP_TITLE);
@@ -58,7 +63,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable, Mous
 		this.setLayout(new BorderLayout());
 		
 		this.m3t = new M3TPlayer();
-
+		this.isStarted = false;
 		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias(), this);
 		this.statusBar = new StatusBar();
 		
@@ -100,7 +105,13 @@ public class MainWindow extends JFrame implements ActionListener, Runnable, Mous
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			this.play();
+			if(this.isStarted)
+				this.play();
+			else{
+				this.m3t = new M3TPlayer();
+				this.isStarted = true;
+				this.play();
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getNextButton())){	
