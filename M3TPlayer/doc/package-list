@@ -1,0 +1,6 @@
+fr.iutvalence.m3tplayer.core
+fr.iutvalence.m3tplayer.core.enumerations
+fr.iutvalence.m3tplayer.core.exceptions
+fr.iutvalence.m3tplayer.core.gui
+fr.iutvalence.m3tplayer.launcher
+fr.iutvalence.utils
