@@ -81,19 +81,7 @@ public class M3TPlayer{
 
 	}
 	
-//	public M3TPlayer(Media media) {
-//		this.library = new Library();
-//		this.volume = 100;
-//		this.randomPlaying = false;
-//		this.isPlaying = false;
-//		this.isPausing = false;
-//		this.position = 0;
-//		this.currentMedia = media;
-//
-//		this.player = null;
-//		this.randomGenerator = new Random();
-//
-//	}
+
 	
 	/**
 	 * @return le mediaId
