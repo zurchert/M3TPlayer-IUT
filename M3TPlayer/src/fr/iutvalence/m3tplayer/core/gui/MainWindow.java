@@ -134,6 +134,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable, Mous
 		
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
 			this.stop();
+			this.m3t = new M3TPlayer();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getRandomButton())){
