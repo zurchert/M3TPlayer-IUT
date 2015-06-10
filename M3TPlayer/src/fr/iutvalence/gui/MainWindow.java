@@ -3,35 +3,50 @@ package fr.iutvalence.gui;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import enumerations.PlayerControl;
 import fr.iutvalence.m3tplayer.M3TPlayer;
-import fr.iutvalence.m3tplayer.Media;
 
-public class MainWindow extends JFrame implements ActionListener, Runnable{
+public class MainWindow extends JFrame implements ActionListener, Runnable, MouseListener{
 	
+	/**
+	 * The application's name
+	 */
 	private static final String APP_TITLE = "M3TPlayer";
 
+	/**
+	 * The control button panel
+	 */
 	private ControlButtonsPanel controllButtonsPanel;
 	
+	/**
+	 * The M3TPlayer
+	 */
 	private M3TPlayer m3t;
 	
-	private Thread t;
+	/**
+	 * The thread used to controll the player
+	 */
+	private Thread thread;
 	
-	private JFrame frame;
-	
+	/**
+	 * The status bar
+	 */
 	private StatusBar statusBar;
 	
+	/**
+	 * The music list panel
+	 */
 	private MusicListPanel musicListPanel;
-	
-	private Media currentMedia;
-	
 	
 	public MainWindow(){
 		
@@ -40,15 +55,16 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		this.setLayout(new BorderLayout());
 		
 		this.m3t = new M3TPlayer();
-		
-		this.frame = new JFrame();
-		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
+
+		this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias(), this);
 		this.statusBar = new StatusBar();
 		
 		this.controllButtonsPanel = new ControlButtonsPanel(this);
 		this.getContentPane().add(this.controllButtonsPanel, BorderLayout.NORTH);
 		this.getContentPane().add(this.musicListPanel, BorderLayout.CENTER);
 		this.getContentPane().add(this.statusBar, BorderLayout.SOUTH);
+		
+		this.getContentPane().addMouseListener(this);
 		
 		this.pack();
 	}
@@ -73,7 +89,7 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		    	 */
 		    	this.m3t.getLibrary().importMedia(new File(fileChooser.getSelectedFile().getPath()).getPath());
 
-		    	this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias());
+		    	this.musicListPanel = new MusicListPanel(this.m3t.getLibrary().getListMedias(), this);
 		    	this.getContentPane().add(this.musicListPanel, BorderLayout.CENTER);
 		    	
 		    	this.statusBar.displayMessage("The file has been correctly imported");
@@ -81,72 +97,113 @@ public class MainWindow extends JFrame implements ActionListener, Runnable{
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPlayButton())){
-			if(!this.m3t.isPlaying()){
-				this.t = new Thread() {
-					public void run() {
-						if(!MainWindow.this.m3t.isPausing()){
-								MainWindow.this.m3t = new M3TPlayer();
-								MainWindow.this.m3t.playMedia();
-						}
-						else MainWindow.this.m3t.playMedia();
-										
-					}
-				};
-				this.t.start();
-				this.m3t.setPlaying(true);
-
-			}
-			else {
-				this.t.stop();
-				this.m3t.setPlaying(false);
-				this.m3t.setPausing(true);
-			}
-			this.setTitle(this.m3t.getCurrentMedia().getTitle());
+			this.play();
 		}
 		
-		if(source.equals(this.controllButtonsPanel.getNextButton())){			
-			this.t.stop();
-			this.m3t.changeMedia(PlayerControl.NEXT);
-			this.t = new Thread() {
-				public void run() {
-					MainWindow.this.m3t.playMedia();				
-				}
-			};
-
-			this.t.start();
-			this.setTitle(this.m3t.getCurrentMedia().getTitle());
-
+		if(source.equals(this.controllButtonsPanel.getNextButton())){	
+			if(this.m3t.isPlaying() || this.m3t.isPausing()){
+				this.thread.stop();
+				this.m3t.changeMedia(PlayerControl.NEXT);
+				this.thread = new Thread() {
+					public void run() {
+						MainWindow.this.m3t.playMedia();				
+					}
+				};
+	
+				this.thread.start();
+				this.setMediaTitle();
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getPreviousButton())){
-			this.t.stop();
-			this.m3t.changeMedia(PlayerControl.PREVIOUS);
-			this.t = new Thread() {
-				public void run() {
-					MainWindow.this.m3t.playMedia();				
-				}
-			};
-			this.t.start();
-			this.setTitle(this.m3t.getCurrentMedia().getTitle());
+			if(this.m3t.isPlaying() || this.m3t.isPausing()){
+				this.thread.stop();
+				this.m3t.changeMedia(PlayerControl.PREVIOUS);
+				this.thread = new Thread() {
+					public void run() {
+						MainWindow.this.m3t.playMedia();				
+					}
+				};
+				this.thread.start();
+				this.setMediaTitle();
+			}
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getStopButton())){
-			if (this.m3t.isPlaying()){
-				this.t.stop();
-				MainWindow.this.m3t.setCurretnMedia(MainWindow.this.m3t.getLibrary().getMedia(0));
-				this.m3t.setPlaying(false);
-				this.m3t.setPausing(false);
-			}
+			this.stop();
 		}
 		
 		if(source.equals(this.controllButtonsPanel.getRandomButton())){
 			this.m3t.setRandomPlaying();
-			this.setTitle(this.m3t.getCurrentMedia().getTitle());
+			this.setMediaTitle();
+		}
+	}
+	
+	public void setMediaTitle(){
+		this.setTitle(APP_TITLE + " | " + this.m3t.getCurrentMedia().getTitle());
+	}
+	
+	public void play(){
+		if(!this.m3t.isPlaying()){
+			this.thread = new Thread() {
+				public void run() {
+					MainWindow.this.m3t.playMedia();				
+				}
+			};
+			this.thread.start();
+			this.m3t.setPlaying(true);
+
+		}
+		else {
+			this.thread.stop();
+			this.m3t.setPlaying(false);
+			this.m3t.setPausing(true);
+		}
+		this.setMediaTitle();
+	}
+	
+	public void stop(){
+		if (this.m3t.isPlaying()){
+			this.thread.stop();
+			MainWindow.this.m3t.setCurretnMedia(MainWindow.this.m3t.getLibrary().getMedia(0));
+			this.m3t.setPlaying(false);
+			this.m3t.setPausing(false);
 		}
 	}
 	
 	@Override
 	public void run() {
 		this.setVisible(true);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent event) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent event) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseExited(MouseEvent event) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mousePressed(MouseEvent event) {		
+		if(event.getClickCount() == 2){
+			JTable target = (JTable) event.getSource();
+			int row = target.rowAtPoint(event.getPoint());
+			this.stop();
+			this.m3t.setCurretnMedia(this.m3t.getLibrary().getMedia(row));
+			this.play();
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent event) {
+		// TODO Auto-generated method stub
 	}
 }
