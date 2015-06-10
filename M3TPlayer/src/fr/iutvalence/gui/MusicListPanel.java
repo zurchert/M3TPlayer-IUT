@@ -1,26 +1,33 @@
 package fr.iutvalence.gui;
 
+import java.awt.event.MouseListener;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 import fr.iutvalence.m3tplayer.Media;
 import fr.iutvalence.m3tplayer.Music;
 
 public class MusicListPanel extends JScrollPane{
 
+	/**
+	 * The media list table
+	 */
 	private JTable mediaTable;
 	
-	private DefaultTableModel tableModel;
-	
+	/**
+	 * The data in the list
+	 */
 	private Object[][] data;
 	
+	/**
+	 * The list of medias
+	 */
 	private Map<Integer, Media> medias;
 	
-	public MusicListPanel(Map<Integer, Media> medias) {
+	public MusicListPanel(Map<Integer, Media> medias, MouseListener listener) {
 		super();
 		this.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_AS_NEEDED);
 		this.medias = medias;
@@ -29,8 +36,12 @@ public class MusicListPanel extends JScrollPane{
 		this.mediaTable = new JTable(this.data, headers);
 		this.add(this.mediaTable);
 		this.setViewportView(this.mediaTable);
+		this.mediaTable.addMouseListener(listener);
 	}
 	
+	/**
+	 * Parses the media list and put the right elements into the table
+	 */
 	private void parseMediaList(){
 		
 		int line = 0;
@@ -56,4 +67,12 @@ public class MusicListPanel extends JScrollPane{
 			line++;
 		}
 	}
+
+	/**
+	 * @return the mediaTable
+	 */
+	public JTable getMediaTable() {
+		return this.mediaTable;
+	}
+
 }

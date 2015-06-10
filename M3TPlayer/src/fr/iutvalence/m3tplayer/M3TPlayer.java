@@ -58,6 +58,8 @@ public class M3TPlayer{
 
 	private boolean isPausing;
 	
+	private boolean isStoped;
+	
 	private int mediaId;
 	
 	/**
@@ -70,6 +72,7 @@ public class M3TPlayer{
 		this.randomPlaying = false;
 		this.isPlaying = false;
 		this.isPausing = false;
+		this.isStoped = true;
 		this.position = 0;
 		if(this.library.isEmpty())
 			this.currentMedia = null;
@@ -80,8 +83,6 @@ public class M3TPlayer{
 		this.randomGenerator = new Random();
 
 	}
-	
-
 	
 	/**
 	 * @return le mediaId
@@ -125,19 +126,8 @@ public class M3TPlayer{
 	public void stop(){
 		this.player.stop();
 		this.isPlaying = false;
-	}
-	
-	
-	public void pause(){
-		// TODO Check method behavior
-		Player playing;
-		try {
-			playing = new Player(this.currentMedia.getStream());
-			this.position = playing.getPosition();
-			this.player.stop();
-		} catch (JavaLayerException e) {
-			e.printStackTrace();
-		}
+		this.isStoped = true;
+		this.isPausing = false;
 	}
 	
 	/**
@@ -213,6 +203,7 @@ public class M3TPlayer{
 		try {
 			this.player = new AdvancedPlayer(this.currentMedia.getStream());
 			   this.isPlaying = true;
+			   this.isStoped = false;
 			   this.player.play(0, Integer.MAX_VALUE);
 			   while (this.isPlaying){
 			    this.changeMedia(PlayerControl.NEXT);
@@ -251,5 +242,18 @@ public class M3TPlayer{
 	public void setPausing(boolean isPausing) {
 		this.isPausing = isPausing;
 	}
-	
+
+	/**
+	 * @return the isStoped
+	 */
+	public boolean isStoped() {
+		return this.isStoped;
+	}
+
+	/**
+	 * @param isStoped the isStoped to set
+	 */
+	public void setStoped(boolean isStoped) {
+		this.isStoped = isStoped;
+	}
 }

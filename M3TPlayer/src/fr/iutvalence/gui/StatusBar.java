@@ -9,10 +9,19 @@ import javax.swing.Timer;
 
 public class StatusBar extends JLabel{
 
+	/**
+	 * The default message to display
+	 */
 	private final static String DEFAULT_CLEAR_MESSAGE = "Status: ";
 	
+	/**
+	 * The ready message
+	 */
 	private final static String MESSAGE_READY = DEFAULT_CLEAR_MESSAGE + "Ready";
 	
+	/**
+	 * The delay to display the message
+	 */
 	private final static int DELAY = 2000;
 	
 	public StatusBar(){

@@ -39,18 +39,11 @@ public class ControlButtonsPanel extends JPanel{
 	private JButton importButton;
 	
 	/**
-	 * the button to validate the importation
-	 */
-	
-	private JButton validButton;
-	
-	/**
 	 * the button to go to stop the playingmusic
 	 */
 	
 	private JButton stopButton;
 	
-	private String nameButtonPlay;
 	
 	/**
 	 * actionlistener to gives the role of any buttons
@@ -59,13 +52,11 @@ public class ControlButtonsPanel extends JPanel{
 	
 	public ControlButtonsPanel(ActionListener listener) {
 		super();
-		this.nameButtonPlay = "Play";
-		this.playButton = new JButton(this.nameButtonPlay);
+		this.playButton = new JButton("Play");
 		this.nextButton = new JButton("Next");
 		this.previousButton = new JButton("Previous");
 		this.randomButton = new JButton("Random");
-		this.importButton = new JButton("Import");
-		this.validButton = new JButton("OK");	
+		this.importButton = new JButton("Import");	
 		this.stopButton = new JButton("Stop");
 		
 		this.add(this.importButton);
@@ -80,16 +71,7 @@ public class ControlButtonsPanel extends JPanel{
 		this.nextButton.addActionListener(listener);
 		this.previousButton.addActionListener(listener);
 		this.randomButton.addActionListener(listener);
-		this.validButton.addActionListener(listener);
 		this.stopButton.addActionListener(listener);
-	}
-
-
-	/**
-	 * @param nameButtonPlay the nameButtonPlay to define
-	 */
-	public void setNameButtonPlay(String nameButtonPlay) {
-		this.nameButtonPlay = nameButtonPlay;
 	}
 
 
@@ -97,23 +79,14 @@ public class ControlButtonsPanel extends JPanel{
 	 * @return the stopButton
 	 */
 	public JButton getStopButton() {
-		return stopButton;
+		return this.stopButton;
 	}
-
-
-	/**
-	 * @return the validButton
-	 */
-	public JButton getValidButton() {
-		return validButton;
-	}
-
 
 	/**
 	 * @return the importButton
 	 */
 	public JButton getImportButton() {
-		return importButton;
+		return this.importButton;
 	}
 
 
@@ -144,6 +117,5 @@ public class ControlButtonsPanel extends JPanel{
 	public JButton getRandomButton() {
 		return this.randomButton;
 	}
-	
 	
 }
