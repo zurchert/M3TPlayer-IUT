@@ -1,9 +1,7 @@
-package enumerations;
+package fr.iutvalence.m3tplayer.core.enumerations;
 
 /**
- * enumeration which enum the controls of the user
- * @author klimczam
- *
+ * Enumeration which enum the controls of the user
  */
 public enum PlayerControl {
 

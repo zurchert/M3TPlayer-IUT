@@ -1,4 +1,4 @@
-package fr.iutvalence.gui;
+package fr.iutvalence.m3tplayer.core.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +7,9 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 
+/**
+ * A status bar which can display message during a given delay
+ */
 public class StatusBar extends JLabel{
 
 	/**

@@ -1,5 +1,8 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
+/**
+ * Represents a playlist (list of music)
+ */
 public class Playlist extends Library{
 
 	/**

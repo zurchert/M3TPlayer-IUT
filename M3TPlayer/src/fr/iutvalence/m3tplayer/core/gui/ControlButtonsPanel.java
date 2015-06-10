@@ -1,4 +1,4 @@
-package fr.iutvalence.gui;
+package fr.iutvalence.m3tplayer.core.gui;
 
 import java.awt.event.ActionListener;
 
@@ -6,8 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * 
- * class to the control of different buttons
+ * This class contains the controller buttons
+ * used to interact with the player
  */
 public class ControlButtonsPanel extends JPanel{
 	

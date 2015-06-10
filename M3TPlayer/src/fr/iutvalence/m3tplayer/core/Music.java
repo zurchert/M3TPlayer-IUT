@@ -1,6 +1,8 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
-
+/**
+ * Repreents a Music
+ */
 public class Music extends Media{
 	
 	/**
@@ -31,7 +33,7 @@ public class Music extends Media{
 	 * @param title  The title of the music
 	 * @param path   The path of the music on the hard-drive
 	 * @param lenght The lenght of the music
-	 * @see fr.iutvalence.m3tplayer.Media
+	 * @see fr.iutvalence.m3tplayer.core.Media
 	 */
 	public Music(String title, String path, int lenght) {
 		super(title, path);
@@ -49,7 +51,7 @@ public class Music extends Media{
 	 * @param lenght The lenght of the music
 	 * @param artist The artist of the music
 	 * @param album  The album of the music
-	 * @see fr.iutvalence.m3tplayer.Media
+	 * @see fr.iutvalence.m3tplayer.core.Media
 	 */
 	public Music(String title, String path, int lenght, String artist, String album) {
 		super(title, path);

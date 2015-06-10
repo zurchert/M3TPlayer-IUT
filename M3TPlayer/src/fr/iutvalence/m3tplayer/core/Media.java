@@ -1,10 +1,13 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * Represents a audio Media
+ */
 public class Media {
 	
 	/**

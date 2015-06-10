@@ -1,4 +1,4 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
 
 /**

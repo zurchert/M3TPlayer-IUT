@@ -1,4 +1,4 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,8 +26,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import enumerations.MediaInformation;
-import fr.iutvalence.exceptions.UnknownMediaException;
+import fr.iutvalence.m3tplayer.core.enumerations.MediaInformation;
+import fr.iutvalence.m3tplayer.core.exceptions.UnknownMediaException;
 import fr.iutvalence.utils.Utils;
 
 /**

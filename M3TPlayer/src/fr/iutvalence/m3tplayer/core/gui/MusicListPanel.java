@@ -1,4 +1,4 @@
-package fr.iutvalence.gui;
+package fr.iutvalence.m3tplayer.core.gui;
 
 import java.awt.event.MouseListener;
 import java.util.Iterator;
@@ -7,9 +7,13 @@ import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import fr.iutvalence.m3tplayer.Media;
-import fr.iutvalence.m3tplayer.Music;
+import fr.iutvalence.m3tplayer.core.Media;
+import fr.iutvalence.m3tplayer.core.Music;
 
+/**
+ * Panel which contains the list of the imported media.
+ * Medias are stored into a table
+ */
 public class MusicListPanel extends JScrollPane{
 
 	/**

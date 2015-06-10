@@ -1,4 +1,4 @@
-package fr.iutvalence.m3tplayer;
+package fr.iutvalence.m3tplayer.core;
 
 import java.util.Random;
 
@@ -11,7 +11,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
-import enumerations.PlayerControl;
+import fr.iutvalence.m3tplayer.core.enumerations.PlayerControl;
 
 public class M3TPlayer{
 
@@ -134,7 +134,7 @@ public class M3TPlayer{
 	 * Allow to change the volume of the M3TPlayer
 	 */
 	public void changeVolume(){
-		//TODO method
+		//FIXME all
 		DataLine.Info info = null;
 	    Clip clip;
 		try {
@@ -144,7 +144,6 @@ public class M3TPlayer{
 		    float dB = (float) (Math.log(gain) / Math.log(10.0) * 20.0);
 		    gainControl.setValue(dB);
 		} catch (LineUnavailableException e) {
-			// TODO Bloc catch généré automatiquement
 			e.printStackTrace();
 		}
 		

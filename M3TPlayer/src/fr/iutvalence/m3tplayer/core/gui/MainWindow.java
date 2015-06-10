@@ -1,4 +1,4 @@
-package fr.iutvalence.gui;
+package fr.iutvalence.m3tplayer.core.gui;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -13,9 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import enumerations.PlayerControl;
-import fr.iutvalence.m3tplayer.M3TPlayer;
+import fr.iutvalence.m3tplayer.core.M3TPlayer;
+import fr.iutvalence.m3tplayer.core.enumerations.PlayerControl;
 
+/**
+ * The main window of the M3TPlayer
+ */
 public class MainWindow extends JFrame implements ActionListener, Runnable, MouseListener{
 	
 	/**
